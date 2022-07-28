@@ -1,3 +1,8 @@
+# 配置服务器端口
+server:
+  port: 8888
+
+# 连接数据库
 spring:
   datasource:
     username: root
@@ -30,3 +35,4 @@ mybatis-plus:
     db-config:
       logic-delete-value: true #逻辑已删除值true
       logic-not-delete-value: false #逻辑未删除值false
+
