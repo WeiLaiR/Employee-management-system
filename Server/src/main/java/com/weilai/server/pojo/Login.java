@@ -17,6 +17,7 @@ public class Login {
     private Long eid;
     private String email;
     private String password;
+    private Integer level;
 //    逻辑删除
     @TableLogic
     private Boolean is_delete;
