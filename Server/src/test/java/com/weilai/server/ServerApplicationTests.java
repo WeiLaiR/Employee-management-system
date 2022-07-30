@@ -1,8 +1,11 @@
 package com.weilai.server;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.weilai.server.mapper.LoginMapper;
 import com.weilai.server.pojo.Login;
+import com.weilai.server.service.LoginServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,9 @@ class ServerApplicationTests {
 
     @Autowired
     LoginMapper loginMapper;
+    @Autowired
+    private LoginServiceImpl loginService;
+
     @Test
     void contextLoads() {
     }
@@ -58,6 +64,14 @@ class ServerApplicationTests {
         QueryWrapper<Login> wrapper = new QueryWrapper<>();
         wrapper.eq("email","123456@gmail.com");
         loginMapper.delete(wrapper);
+    }
+
+    @Test
+    public void MybatisPlusTest04_query() {
+        List<Login> list = loginService.list();
+        for (Login login : list){
+            System.out.println(login);
+        }
     }
 
 
