@@ -48,6 +48,7 @@ class ServerApplicationTests {
         Login login = new Login();
         login.setEmail("123456@gmail.com");
         login.setPassword("123456");
+        login.setLevel(1);
         loginMapper.insert(login);
     }
 
