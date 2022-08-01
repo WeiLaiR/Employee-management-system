@@ -3,13 +3,18 @@ package com.weilai.server;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.weilai.server.mapper.LoginMapper;
+import com.weilai.server.pojo.Department;
 import com.weilai.server.pojo.Login;
+import com.weilai.server.service.DepartmentService;
+import com.weilai.server.service.LoginService;
 import com.weilai.server.service.LoginServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
@@ -22,7 +27,10 @@ class ServerApplicationTests {
     @Autowired
     LoginMapper loginMapper;
     @Autowired
-    private LoginServiceImpl loginService;
+    private LoginService loginService;
+
+    @Autowired
+    private DepartmentService departmentService;
 
     @Test
     void contextLoads() {
@@ -72,6 +80,36 @@ class ServerApplicationTests {
         for (Login login : list){
             System.out.println(login);
         }
+    }
+
+    @Test
+    public void MybatisPlusTest05_save() {
+        Login login = new Login();
+        login.setEmail("1@gmail.com");
+        login.setPassword("123456");
+        login.setLevel(2);
+        loginService.save(login);
+    }
+
+    @Test
+    public void MybatisPlusTest06_query() {
+        List<Department> list = departmentService.list();
+        for (Department department : list){
+            System.out.println(department);
+        }
+    }
+
+//  分页查询
+    @Test
+    public void MybatisPlusTest07_page() {
+        Page<Department> page = new Page<>(1, 2);
+        departmentService.page(page);
+//        显示当前这一页的内容
+        for (Department department : page.getRecords()){
+            System.out.println(department);
+        }
+//        一共有多少页
+        System.out.println(page.getPages());
     }
 
 
