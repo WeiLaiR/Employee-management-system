@@ -87,11 +87,15 @@
         </div>
 
         <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
-          <el-table-column prop="date" label="日期" width="140">
+          <el-table-column prop="eid" label="员工id" width="180">
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="120">
+          <el-table-column prop="name" label="姓名" width="130">
           </el-table-column>
-          <el-table-column prop="address" label="地址">
+          <el-table-column prop="department" label="部门" width="150">
+          </el-table-column>
+          <el-table-column prop="post" label="岗位">
+          </el-table-column>
+          <el-table-column prop="createTime" label="入职时间">
           </el-table-column>
           <el-table-column label="操作"  width="200" align="center">
             <template slot-scope="scope">
@@ -102,11 +106,14 @@
         </el-table>
         <div style="padding: 10px 0">
           <el-pagination
-
-              :page-sizes="[5, 10, 15, 20]"
-              :page-size="10"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="pageNum"
+              :page-sizes="[5, 10, 15, 20, 30]"
+              :page-size="pageSize"
+              :total="total"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="400">
+              >
           </el-pagination>
         </div>
       </el-main>
@@ -120,13 +127,11 @@
 export default {
   name: 'HomeView',
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
     return {
-      tableData: Array(10).fill(item),
+      pageNum: 1,
+      pageSize: 10,
+      tableData: [],
+      total: 0,
       msg: "hello world",
       collapseBtnClass: 'el-icon-s-fold',
       isCollapse: false, //默认侧边栏展开
@@ -134,6 +139,10 @@ export default {
       logoTextShow: true,
       headerBg: 'headerBg'
     }
+  },
+  created() {
+    //  请求分页查询数据
+    this.loadData()
   },
   methods: {
     collapse() {  // 点击收缩按钮触发
@@ -147,6 +156,27 @@ export default {
         this.collapseBtnClass = 'el-icon-s-fold'
         this.logoTextShow = true //展开，图标旁边的文字展示
       }
+    },
+    loadData() {
+      this.axios({
+        method: "GET",
+        url: "http://localhost:8888/department/getPage/"+this.pageNum+"/"+this.pageSize
+      }).then(res =>{
+        console.log(res.data)
+        this.tableData = res.data.values
+        this.total = res.data.total
+        console.log(this.total)
+      })
+    },
+    handleSizeChange(pageSize) {
+      console.log(pageSize)
+      this.pageSize = pageSize
+      this.loadData()
+    },
+    handleCurrentChange(pageNum) {
+      console.log(pageNum)
+      this.pageNum = pageNum
+      this.loadData()
     }
   }
 }
