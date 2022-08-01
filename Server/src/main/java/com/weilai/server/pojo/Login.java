@@ -20,7 +20,7 @@ public class Login {
     private Integer level;
 //    逻辑删除
     @TableLogic
-    private Boolean is_delete;
+    private Boolean isDelete;
 
 
 }
