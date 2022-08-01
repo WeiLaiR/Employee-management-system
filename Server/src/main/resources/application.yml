@@ -36,6 +36,10 @@ spring:
       # 无需重启的目录
       exclude: static/**
 
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
 
 #Mybatis-plus配置
 mybatis-plus:
