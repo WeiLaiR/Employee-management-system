@@ -26,6 +26,16 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
 
+  # 配置热部署
+  devtools:
+    restart:
+      # 开启热部署
+      enabled: true
+      # 需要重启的目录
+      additional-paths: src/main/java
+      # 无需重启的目录
+      exclude: static/**
+
 
 #Mybatis-plus配置
 mybatis-plus:
