@@ -44,6 +44,17 @@ public class DepartmentController {
         return map;
     }
 
+//    当前用于手动添加员工信息，后期功能会调整
+    @PostMapping("/addDep")
+    public boolean addDep(@RequestBody Department department){
+        return departmentService.save(department);
+    }
+
+
+
+
+
+
 
 
 }
