@@ -36,10 +36,15 @@ spring:
       # 无需重启的目录
       exclude: static/**
 
+# 配置Date类型转json的格式
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
+# 更改路径匹配规则，保证可以正常使用新版swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 #Mybatis-plus配置
 mybatis-plus:
