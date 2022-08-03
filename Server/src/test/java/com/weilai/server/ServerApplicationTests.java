@@ -115,9 +115,9 @@ class ServerApplicationTests {
 //  快速插入数据
     @Test
     public void MybatisPlusTest08_save() {
-        for (int i = 0; i < 88; i++) {
+        for (int i = 0; i < 16; i++) {
             Department department = new Department();
-            department.setName("王八");
+            department.setName("李" + i);
             department.setDepartment("开发部");
             department.setPost("后端开发工程师");
             departmentService.save(department);
