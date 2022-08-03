@@ -73,10 +73,18 @@
         </div>
 
         <div style="margin: 10px 0">
-          <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search"></el-input>
-          <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5"></el-input>
-          <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5"></el-input>
-          <el-button class="ml-5" type="primary">搜索</el-button>
+          <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="name"></el-input>
+          <el-select v-model="depValue" clearable placeholder="请选择部门" class="ml-5" style="width: 200px">
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value">
+            </el-option>
+          </el-select>
+<!--          <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5"></el-input>-->
+<!--          <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5"></el-input>-->
+          <el-button class="ml-5" type="primary" @click="loadData">搜索</el-button>
         </div>
 
         <div style="margin: 10px 0">
@@ -130,6 +138,7 @@ export default {
     return {
       pageNum: 1,
       pageSize: 10,
+      name: "",
       tableData: [],
       total: 0,
       msg: "hello world",
@@ -137,7 +146,21 @@ export default {
       isCollapse: false, //默认侧边栏展开
       sideWidth: 200, //动态的通过变量控制侧边栏高度
       logoTextShow: true,
-      headerBg: 'headerBg'
+      headerBg: 'headerBg',
+      options: [{
+        value: '开发部'
+      }, {
+        value: '市场部'
+      }, {
+        value: '营销部'
+      }, {
+        value: '采购部'
+      }, {
+        value: '人事部'
+      }, {
+        value: '财务部'
+      }],
+      depValue: ""
     }
   },
   created() {
@@ -160,7 +183,7 @@ export default {
     loadData() {
       this.axios({
         method: "GET",
-        url: "http://localhost:8888/department/getPage/"+this.pageNum+"/"+this.pageSize
+        url: "http://localhost:8888/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.name === "" ? "null": this.name)+"/"+(this.depValue === "" ? "null": this.depValue)
       }).then(res =>{
         console.log(res.data)
         this.tableData = res.data.values
