@@ -89,7 +89,7 @@
         </div>
 
         <div style="margin: 10px 0">
-          <el-button type="primary">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
+          <el-button type="primary" @click="openAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
           <el-button type="danger">批量删除 <i class="el-icon-remove-outline"></i></el-button>
           <el-button type="primary">导入 <i class="el-icon-bottom"></i></el-button>
           <el-button type="primary">导出 <i class="el-icon-top"></i></el-button>
@@ -125,8 +125,35 @@
               >
           </el-pagination>
         </div>
-      </el-main>
 
+        <el-dialog title="新增员工信息" :visible.sync="dialogFormVisible" width="500px" >
+          <el-form label-width="120px" size="small">
+            <el-form-item label="姓名" style="width: 330px">
+              <el-input v-model="newDep.name" autocomplete="off" ></el-input>
+            </el-form-item>
+            <el-form-item label="部门" style="width: 330px">
+              <el-select v-model="newDep.department" clearable placeholder="请选择部门" style="width: 210px">
+                <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="岗位" style="width: 330px">
+              <el-input v-model="newDep.post" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addDep">确 定</el-button>
+          </div>
+        </el-dialog>
+
+
+
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -163,7 +190,9 @@ export default {
       }, {
         value: '财务部'
       }],
-      depValue: ""
+      depValue: "",
+      newDep: {},
+      dialogFormVisible: false,
     }
   },
   created() {
@@ -204,6 +233,20 @@ export default {
       console.log(pageNum)
       this.pageNum = pageNum
       this.loadData()
+    },
+    openAdd() {
+      this.dialogFormVisible = true
+      this.newDep = {}
+    },
+    addDep() {
+      request.post("http://localhost:8888/department/addDep",this.newDep).then(res => {
+        if (res) {
+          this.$message.success("新增员工成功")
+          this.dialogFormVisible = false
+        }else {
+          this.$message.error("新增员工失败")
+        }
+      })
     }
   }
 }
