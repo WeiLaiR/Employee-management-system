@@ -85,6 +85,7 @@
 <!--          <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5"></el-input>-->
 <!--          <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5"></el-input>-->
           <el-button class="ml-5" type="primary" @click="loadData">搜索</el-button>
+          <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
         </div>
 
         <div style="margin: 10px 0">
@@ -131,6 +132,8 @@
 </template>
 
 <script>
+
+import request from "@/utils/request";
 
 export default {
   name: 'HomeView',
@@ -181,15 +184,16 @@ export default {
       }
     },
     loadData() {
-      this.axios({
-        method: "GET",
-        url: "http://localhost:8888/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.name === "" ? "null": this.name)+"/"+(this.depValue === "" ? "null": this.depValue)
-      }).then(res =>{
-        console.log(res.data)
-        this.tableData = res.data.values
-        this.total = res.data.total
-        console.log(this.total)
+      request.get("http://localhost:8888/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.name === "" ? "null": this.name)+"/"+(this.depValue === "" ? "null": this.depValue)).then(res => {
+        console.log(res)
+        this.tableData = res.values
+        this.total = res.total
       })
+    },
+    reset() {
+      this.name = ""
+      this.depValue = ""
+      this.loadData()
     },
     handleSizeChange(pageSize) {
       console.log(pageSize)
