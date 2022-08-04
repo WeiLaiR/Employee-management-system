@@ -86,16 +86,21 @@
 <!--          <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5"></el-input>-->
           <el-button class="ml-5" type="primary" @click="loadData">搜索</el-button>
           <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
+          <div style="display:inline; margin: 0 10px;float: right">
+            <el-button type="primary" @click="openAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
+            <el-button type="danger" @click="deleteDeps">批量删除 <i class="el-icon-remove-outline"></i></el-button>
+            <el-button type="primary">导入 <i class="el-icon-bottom"></i></el-button>
+            <el-button type="primary">导出 <i class="el-icon-top"></i></el-button>
+          </div>
         </div>
 
         <div style="margin: 10px 0">
-          <el-button type="primary" @click="openAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
-          <el-button type="danger">批量删除 <i class="el-icon-remove-outline"></i></el-button>
-          <el-button type="primary">导入 <i class="el-icon-bottom"></i></el-button>
-          <el-button type="primary">导出 <i class="el-icon-top"></i></el-button>
+
         </div>
 
-        <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
+        <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="selectionChange">
+          <el-table-column type="selection" width="55">
+          </el-table-column>
           <el-table-column prop="eid" label="员工id" width="180">
           </el-table-column>
           <el-table-column prop="name" label="姓名" width="130">
@@ -108,8 +113,8 @@
           </el-table-column>
           <el-table-column label="操作"  width="200" align="center">
             <template slot-scope="scope">
-              <el-button type="success">编辑 <i class="el-icon-edit"></i></el-button>
-              <el-button type="danger">删除 <i class="el-icon-remove-outline"></i></el-button>
+              <el-button type="success" @click="openEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
+              <el-button type="danger" @click="deleteDep(scope.row)">删除 <i class="el-icon-remove-outline"></i></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -171,6 +176,7 @@ export default {
       name: "",
       tableData: [],
       total: 0,
+      size: 0,
       msg: "hello world",
       collapseBtnClass: 'el-icon-s-fold',
       isCollapse: false, //默认侧边栏展开
@@ -192,6 +198,7 @@ export default {
       }],
       depValue: "",
       newDep: {},
+      Deps: {},
       dialogFormVisible: false,
     }
   },
@@ -213,10 +220,13 @@ export default {
       }
     },
     loadData() {
-      request.get("http://localhost:8888/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.name === "" ? "null": this.name)+"/"+(this.depValue === "" ? "null": this.depValue)).then(res => {
+      request.get("/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.name === "" ? "null": this.name)+"/"+(this.depValue === "" ? "null": this.depValue)).then(res => {
+        console.log("num：" + this.pageNum)
+        console.log("size：" + this.pageSize)
         console.log(res)
         this.tableData = res.values
         this.total = res.total
+        this.size = res.size
       })
     },
     reset() {
@@ -239,15 +249,69 @@ export default {
       this.newDep = {}
     },
     addDep() {
-      request.post("http://localhost:8888/department/addDep",this.newDep).then(res => {
+      request.post("/department/addDep",this.newDep).then(res => {
         if (res) {
-          this.$message.success("新增员工成功")
+          if (this.newDep.eid == null){
+            this.$message.success("新增员工成功")
+          }else {
+            this.$message.success("更新员工信息成功")
+          }
           this.dialogFormVisible = false
+          this.loadData()
         }else {
           this.$message.error("新增员工失败")
         }
       })
-    }
+    },
+    openEdit(row) {
+      this.newDep = row
+      this.dialogFormVisible = true
+    },
+    deleteDep(row) {
+      this.newDep = row
+      this.$confirm('确认删除该员工信息？')
+          .then(_ => {
+            this.isDelete();
+          })
+          .catch(_ => {});
+    },
+    isDelete() {
+      request.post("/department/deleteDep",this.newDep.eid).then(res => {
+        if (res) {
+          this.$message.success("已删除该员工信息！")
+          if (this.total !== 1 && this.size === 1 && this.pageNum > 1) {
+            this.pageNum --
+          }
+          this.loadData()
+        }else {
+          this.$message.error("员工信息删除失败")
+        }
+      })
+    },
+    selectionChange(val) {
+      console.log(val)
+      this.Deps = val
+    },
+    deleteDeps() {
+      this.$confirm('确认批量删除员工信息？？？')
+          .then(_ => {
+            this.isDeleteDeps();
+          })
+          .catch(_ => {});
+    },
+    isDeleteDeps() {
+      request.post("/department/deleteDeps",this.Deps).then(res => {
+        if (res) {
+          this.$message.success("已批量删除员工信息！")
+          if (this.total !== 1 && this.size === this.Deps.length && this.pageNum > 1) {
+            this.pageNum --
+          }
+          this.loadData()
+        }else {
+          this.$message.error("员工信息批量删除失败")
+        }
+      })
+    },
   }
 }
 </script>
