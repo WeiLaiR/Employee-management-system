@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,10 +61,10 @@ class ServerApplicationTests {
     @Test
     public void MybatisPlusTest02_insert() {
         Login login = new Login();
-        login.setEmail("123456@gmail.com");
+        login.setEmail("1234567@gmail.com");
         login.setPassword("123456");
         login.setLevel(1);
-        loginMapper.insert(login);
+        System.out.println(loginMapper.insert(login));
     }
 
 //    逻辑删除测试成功
@@ -115,11 +116,11 @@ class ServerApplicationTests {
 //  快速插入数据
     @Test
     public void MybatisPlusTest08_save() {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 36; i++) {
             Department department = new Department();
-            department.setName("李" + i);
-            department.setDepartment("开发部");
-            department.setPost("后端开发工程师");
+            department.setName("马" + i);
+            department.setDepartment("采购部");
+            department.setPost("采购");
             departmentService.save(department);
         }
     }
