@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Login {
 
-//    ID自动生成，使用雪花算法
+    //    使用了自定义id生成器
     @TableId(type = IdType.ASSIGN_ID)
     private Long eid;
     private String email;
