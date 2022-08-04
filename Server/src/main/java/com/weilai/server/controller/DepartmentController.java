@@ -41,15 +41,26 @@ public class DepartmentController {
         HashMap<String, Object> map = new HashMap<>();
         map.put("total",page.getTotal());
         map.put("values",page.getRecords());
+        map.put("size",page.getRecords().size());
         return map;
     }
 
-//    当前用于手动添加员工信息，后期功能会调整
+//    当前用于手动添加或更新员工信息，后期功能会调整
     @PostMapping("/addDep")
     public boolean addDep(@RequestBody Department department){
-        return departmentService.save(department);
+        return departmentService.addOrUpdateDep(department);
     }
 
+
+    @PostMapping("/deleteDep")
+    public boolean deleteDep(@RequestBody Long eid){
+        return departmentService.removeById(eid);
+    }
+
+    @PostMapping("/deleteDeps")
+    public boolean deleteDeps(@RequestBody List<Department> list){
+        return departmentService.removeByIds(list);
+    }
 
 
 
