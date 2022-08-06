@@ -2,12 +2,12 @@
   <div class="wrapper">
     <div style="margin: 200px auto; background-color: #fff; width: 350px; height: 300px; padding: 20px; border-radius: 10px">
       <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>登 录</b></div>
-      <el-form :model="user" :rules="rules" ref="userForm">
-        <el-form-item prop="username">
-          <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="user.username"></el-input>
+      <el-form :model="loginEmp" :rules="rules" ref="empForm">
+        <el-form-item prop="email">
+          <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="loginEmp.email" type="email"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password v-model="user.password"></el-input>
+          <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password v-model="loginEmp.password"></el-input>
         </el-form-item>
         <el-form-item style="margin: 10px 0; text-align: right">
           <el-button type="primary" size="small"  autocomplete="off" @click="login">登录</el-button>
@@ -23,11 +23,11 @@ export default {
   name: "Login",
   data() {
     return {
-      user: {},
+      loginEmp: {},
       rules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { pattern: /^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/,required: true, message: "请输入正确的邮箱地址", trigger: "blur" }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     login() {
-      this.$refs['userForm'].validate((valid) => {
+      this.$refs['empForm'].validate((valid) => {
         if (valid) {  // 表单校验合法
           this.request.post("/user/login", this.user).then(res => {
             if(!res) {
