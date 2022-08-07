@@ -5,8 +5,9 @@ import com.weilai.server.pojo.Login;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
 
 public interface LoginService extends IService<Login> {
 
-    Boolean loginEmp(String email,String password) throws NoSuchAlgorithmException, InvalidKeySpecException;
+    Map<String,Object> loginEmp(String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException;
 }
