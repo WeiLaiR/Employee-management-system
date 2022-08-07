@@ -23,6 +23,7 @@
 
 <script>
 import JSEncrypt from "jsencrypt";
+import store from "@/store";
 
 export default {
   name: "Login",
@@ -75,7 +76,8 @@ export default {
 
           this.request.post("/login/login/", this.loginEnc).then(res => {
             console.log(res)
-            if (res.state) {
+            if (res.state === "Success") {
+              localStorage.setItem("eid", res.eid)
               this.$router.push("/")
             }else {
               this.$message.error("用户名或密码错误")
