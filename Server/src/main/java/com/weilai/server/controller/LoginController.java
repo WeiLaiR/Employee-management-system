@@ -34,9 +34,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public Map<String,Object> LoginEmp(@RequestBody LoginEnc loginEnc) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("state",loginService.loginEmp(loginEnc.getEmail(), loginEnc.getEncryptPW()));
-        return map;
+        return loginService.loginEmp(loginEnc.getEmail(), loginEnc.getEncryptPW());
     }
 
 
