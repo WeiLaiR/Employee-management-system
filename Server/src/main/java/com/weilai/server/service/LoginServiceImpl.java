@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements LoginService {
@@ -23,7 +25,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     RSA rsa = new RSA();
 
     @Override
-    public Boolean loginEmp(String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public Map<String, Object> loginEmp(String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 //      获取私钥，解密数据
         RSAPrivateKey privateKey = RSAUtils.getPrivateKey(rsa.privateKey);
         String pw = RSAUtils.privateDecrypt(password, privateKey);
@@ -31,9 +33,18 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         QueryWrapper<Login> wrapper = new QueryWrapper<>();
         wrapper.eq("email",email);
         Login emp = loginMapper.selectOne(wrapper);
-        if (pw.equals(emp.getPassword())){
-            return true;
+        HashMap<String, Object> map = new HashMap<>();
+        if (emp != null){
+            if (pw.equals(emp.getPassword())){
+                map.put("state","Success");
+                map.put("eid",emp.getEid());
+                map.put("level",emp.getLevel());
+            }else {
+                map.put("state","Error");
+            }
+        }else {
+            map.put("state","Error");
         }
-        return false;
+        return map;
     }
 }
