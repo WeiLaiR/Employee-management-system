@@ -8,11 +8,15 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './assets/gloable.css'
 import request from "@/utils/request";
 import store from "./store/index";
+import md5 from "js-md5";
+import JSEncrypt from 'jsencrypt';
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI,{size: "mini"})
 Vue.use(VueAxios,axios)
+Vue.prototype.$md5 = md5;
+Vue.prototype.$jsEncrypt = JSEncrypt
 Vue.prototype.request=request
 
 new Vue({
