@@ -45,6 +45,16 @@ public class DepartmentController {
         return map;
     }
 
+    @PostMapping("/getById")
+    public Map<String,Object> getById(@RequestBody Long eid) {
+        HashMap<String, Object> map = new HashMap<>();
+        Department department = departmentService.getById(eid);
+        if (department != null){
+            map.put("name",department.getName());
+        }
+        return map;
+    }
+
 //    当前用于手动添加或更新员工信息，后期功能会调整
     @PostMapping("/addDep")
     public boolean addDep(@RequestBody Department department){
