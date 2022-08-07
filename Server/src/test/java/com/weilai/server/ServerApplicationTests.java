@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -61,9 +62,9 @@ class ServerApplicationTests {
     @Test
     public void MybatisPlusTest02_insert() {
         Login login = new Login();
-        login.setEmail("1234567@gmail.com");
-        login.setPassword("123456");
-        login.setLevel(1);
+        login.setEmail("12345678@gmail.com");
+        login.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        login.setLevel(2);
         System.out.println(loginMapper.insert(login));
     }
 
