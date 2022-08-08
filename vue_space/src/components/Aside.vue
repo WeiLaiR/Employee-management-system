@@ -24,9 +24,15 @@
       </template>
       <el-menu-item index="/employee">
         <i class="el-icon-s-custom"></i>
-        <span slot="title">用户管理</span>
+        <span slot="title">员工管理</span>
       </el-menu-item>
     </el-submenu>
+    <el-menu-item index="/pInformation">
+      <template slot="title">
+        <i class="el-icon-user"></i>
+        <span slot="title">个人信息</span>
+      </template>
+    </el-menu-item>
   </el-menu>
 </template>
 
