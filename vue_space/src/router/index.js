@@ -10,8 +10,9 @@ const routes = [
     component: () => import('../views/Manage.vue'),
     redirect: "/home",
     children: [
-      { path: 'home', name: '首页', component: () => import('../views/Home.vue')},
+      { path: 'home', name: '主页', component: () => import('../views/Home.vue')},
       { path: 'employee', name: '员工管理', component: () => import('../views/Employee.vue')},
+      { path: 'pInformation', name: '个人信息', component: () => import('../views/PInformation.vue')},
     ]
   },
   {
@@ -23,7 +24,12 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue')
-  }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/Register.vue')
+  },
 ]
 
 const router = new VueRouter({
