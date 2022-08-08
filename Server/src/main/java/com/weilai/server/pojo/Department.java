@@ -19,8 +19,8 @@ import java.util.Date;
 public class Department {
 
 
-    //    使用了自定义id生成器
-    @TableId(type = IdType.ASSIGN_ID)
+    //    id自行输入
+    @TableId(type = IdType.INPUT)
     private Long eid;
     private String name;
     private String department;
