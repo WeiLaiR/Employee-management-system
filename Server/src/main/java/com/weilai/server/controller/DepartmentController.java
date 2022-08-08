@@ -51,6 +51,8 @@ public class DepartmentController {
         Department department = departmentService.getById(eid);
         if (department != null){
             map.put("name",department.getName());
+            map.put("department",department.getDepartment());
+            map.put("post",department.getPost());
         }
         return map;
     }
