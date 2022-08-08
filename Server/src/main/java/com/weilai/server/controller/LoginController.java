@@ -3,6 +3,7 @@ package com.weilai.server.controller;
 
 import com.weilai.server.pojo.Login;
 import com.weilai.server.pojo.LoginEnc;
+import com.weilai.server.service.AsyncService;
 import com.weilai.server.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,9 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private AsyncService asyncService;
 
 //    @RequestBody 用于接受前端传过来的json数据
 
@@ -37,5 +41,12 @@ public class LoginController {
         return loginService.loginEmp(loginEnc.getEmail(), loginEnc.getEncryptPW());
     }
 
+
+    @PostMapping("/register")
+    public Map<String,Object> RegisterEmp(@RequestBody LoginEnc loginEnc) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        Map<String,Object> map = loginService.registerEmp(loginEnc.getEmail(), loginEnc.getEncryptPW());
+        asyncService.createData(loginEnc.getEmail());
+        return map;
+    }
 
 }
