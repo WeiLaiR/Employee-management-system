@@ -1,5 +1,6 @@
 package com.weilai.server;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
@@ -22,6 +23,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.weilai.server.utils.AesEncryptUtils.decrypt;
+import static com.weilai.server.utils.AesEncryptUtils.encrypt;
 
 @SpringBootTest
 class ServerApplicationTests {
@@ -124,6 +128,21 @@ class ServerApplicationTests {
             department.setPost("采购");
             departmentService.save(department);
         }
+    }
+
+    @Test
+    public void AesTest() throws Exception {
+        Map<String,String> map=new HashMap<>();
+        map.put("key","value");
+        map.put("中文","汉字");
+        String content = JSONObject.toJSONString(map);
+        System.out.println("加密前：" + content);
+
+        String encrypt = encrypt(content);
+        System.out.println("加密后：" + encrypt);
+
+        String decrypt = decrypt(encrypt);
+        System.out.println("解密后：" + decrypt);
     }
 
 
