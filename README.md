@@ -1,9 +1,5 @@
-<h1 style="text-align: center;">Employee-management-system</h1>
-<h2 style="text-align: center;">基于SpringBoot+Vue开发的员工管理系统</h2>
-
-<hr>
-
-<p>&nbsp;</p>
+<h1 align="center">Employee-management-system</h1>
+<h2 align="center">基于SpringBoot+Vue开发的员工管理系统</h2>
 
 ## 简介
 
