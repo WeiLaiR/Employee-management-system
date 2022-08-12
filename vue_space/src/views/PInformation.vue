@@ -4,7 +4,7 @@
     <div >
       <el-form label-width="60px" style="padding: 8px 25px" size="small">
         <el-form-item label="姓 名">
-          <el-input v-model="newDep.name" autocomplete="off" ></el-input>
+          <el-input v-model="newDep.name" autocomplete="off" maxlength="8" ></el-input>
         </el-form-item>
 
         <el-form-item label="部 门">
@@ -33,16 +33,17 @@ export default {
   data() {
     return {
       newDep: {
+        eid: 0,
         name: "",
         department: "",
         post: "",
-        eid: localStorage.getItem("eid"),
       }
     }
   },
   created() {
-    request.post("/department/getById",this.newDep.eid).then(res => {
+    request.post("/department/getById").then(res => {
       console.log(res)
+      this.newDep.eid = res.eid
       this.newDep.name = res.name
       this.newDep.department = res.department
       this.newDep.post = res.post
