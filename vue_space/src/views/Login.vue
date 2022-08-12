@@ -71,28 +71,23 @@ export default {
            // 进行简单的加盐
            let temp = ""
            for (let i = 0; i < this.loginEmp.password.length; i++) {
-             temp += i * i + temp.length + this.loginEmp.password.length ^ 66
-             temp += String.fromCharCode((i * temp.length * 3 + 6) % 24 + 97)
-             temp += (this.loginEmp.password.charAt(i) + 16) ^ (this.loginEmp.password.length * temp.length % 150 + 8)
+             temp += (i + 7) * (this.loginEmp.password.charCodeAt(this.loginEmp.password.length - i - 1) + temp.length) % 103
+             temp += String.fromCharCode((((i + 3) * this.loginEmp.password.charCodeAt(i) + temp.length) % this.loginEmp.password.length) % 24 + 97)
+             temp += ((this.loginEmp.password.charCodeAt(i) + 16) * temp.length % 107)
              if (i * temp.length % 2 === 0) {
-               temp += (this.loginEmp.password.charAt(i) + 66) ^ (i * temp.length % 300 + 6) + 8
+               temp += String.fromCharCode(((this.loginEmp.password.charCodeAt(this.loginEmp.password.length - i - 1) + temp.length) * (i * temp.length % 300 + 6)) % 24 + 65)
              }
-             temp += String.fromCharCode( (temp.length - i) * temp.length % 24 + 65)
+             temp += String.fromCharCode( ((this.loginEmp.password.charCodeAt(i) + i) * temp.length) % 24 + 65)
            }
-           console.log(temp)
 
            //对数据进行SHA256加密
            let sha256PW = this.$SHA256(temp)
-
-           console.log(sha256PW)
 
            //对已进行SHA256加密的密码进行不对称加密
            let encrypt = new JSEncrypt();
            encrypt.setPublicKey(this.publicKey)
            this.loginEnc.encryptPW = encrypt.encrypt(sha256PW)
            this.loginEnc.email = this.loginEmp.email
-
-           console.log(this.loginEnc.encryptPW)
 
            request.post("/login/login", this.loginEnc).then(res => {
              console.log(res)
