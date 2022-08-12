@@ -6,6 +6,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+
+/**
+ * 解决跨域问题
+ */
+
 @Configuration
 public class CorsConfig {
 
@@ -24,4 +29,7 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", corsConfiguration); // 4 对接口配置跨域设置
         return new CorsFilter(source);
     }
+
+
+
 }
