@@ -33,7 +33,8 @@
 
 <script>
 import JSEncrypt from "jsencrypt";
-import store from "@/store";
+import request from "@/utils/request";
+import SHA256 from "js-sha256";
 
 export default {
   name: "Register",
@@ -43,7 +44,6 @@ export default {
         email: "",
         password: "",
         confirmPassword: "",
-        md5PW: "",
       },
       loginEnc: {
         email: "",
@@ -57,52 +57,62 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+          { min: 8, max: 30, message: '长度在 8 到 30 个字符', trigger: 'blur' }
         ],
         confirmPassword: [
           { required: true, message: '请再次输入密码', trigger: 'blur' },
-          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+          { min: 8, max: 20, message: '长度在 8 到 30 个字符', trigger: 'blur' }
         ],
       }
     }
   },
-  created() {
-    //请求后端发送公钥
-    this.request.post("/RSA/getPublicKey").then(res => {
-      this.publicKey = res.publicKey
-    })
-  },
   methods: {
     Register() {
-      this.$refs['empForm'].validate((valid) => {
+      this.$refs['empForm'].validate(async (valid) => {
         if (valid) {  // 表单校验合法
 
-          if (this.loginEmp.confirmPassword !== this.loginEmp.password){
+          //请求后端发送公钥
+          //注意！！！这里必须加await来等待异步任务执行完成，也就是将当前任务设置为同步，不然axios默认异步执行！！！
+          await request.post("/RSA/getPublicKey").then(res => {
+            this.publicKey = res.publicKey
+          })
+
+          if (this.loginEmp.confirmPassword !== this.loginEmp.password) {
             this.$message.error("两次输入的密码不一致")
             return false
           }
 
-          //对数据进行MD5加密
-          this.loginEmp.md5PW = this.$md5(this.loginEmp.password)
+          // 进行简单的加盐
+          let temp = ""
+          for (let i = 0; i < this.loginEmp.password.length; i++) {
+            temp += i * i + temp.length + this.loginEmp.password.length ^ 66
+            temp += String.fromCharCode((i * temp.length * 3 + 6) % 24 + 97)
+            temp += (this.loginEmp.password.charAt(i) + 16) ^ (this.loginEmp.password.length * temp.length % 150 + 8)
+            if (i * temp.length % 2 === 0) {
+              temp += (this.loginEmp.password.charAt(i) + 66) ^ (i * temp.length % 300 + 6) + 8
+            }
+            temp += String.fromCharCode( (temp.length - i) * temp.length % 24 + 65)
+          }
+          console.log(temp)
 
-          console.log(this.publicKey)
-          //对已进行MD5加密的密码进行不对称加密
+          //对数据进行SHA256加密
+          let sha256PW = this.$SHA256(temp)
+          console.log(sha256PW)
+
+          //对已进行SHA256加密的密码进行不对称加密
           let encrypt = new JSEncrypt();
           encrypt.setPublicKey(this.publicKey)
-          this.loginEnc.encryptPW = encrypt.encrypt(this.loginEmp.md5PW)
-          this.loginEnc.encryptPW = encrypt.encrypt(this.loginEmp.md5PW)
-          console.log(this.loginEnc.encryptPW)
+          this.loginEnc.encryptPW = encrypt.encrypt(sha256PW)
           this.loginEnc.email = this.loginEmp.email
+          console.log(this.loginEnc.encryptPW)
 
-          this.request.post("/login/register/", this.loginEnc).then(res => {
+          request.post("/login/register", this.loginEnc).then(res => {
             console.log(res)
             if (res.state === "Success") {
               this.$message.success("注册成功，请登录！")
               this.$router.push("/login")
-            }else if (res.state() === "ErrorDuplicate"){
-              this.$message.error("该邮箱已被注册！")
-            }else {
-              this.$message.error("出现了未知错误，请稍后再试")
+            } else {
+              this.$message.error(res.message)
             }
           })
         } else {
