@@ -1,6 +1,40 @@
 package com.weilai.server.utils;
 
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
+
+@Component
 public class RSA {
-    public final String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCgsJUqAZYL8ppCj4PinagB3IhwOlRIUeJyatzD3GfaCjlZxHMPXGWyF9n1RXdnOZE9SsNnpHIvRn6enp4VS9gMJXvnFcaraznfqX5QHZJYn569guGDEi5LYY0+E3EeHfco4sEV4VKuRvoXmIykiKYrDII+pmfiX7VGDWeqeznlawIDAQAB";
-    public final String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKCwlSoBlgvymkKPg+KdqAHciHA6VEhR4nJq3MPcZ9oKOVnEcw9cZbIX2fVFd2c5kT1Kw2ekci9Gfp6enhVL2Awle+cVxqtrOd+pflAdklifnr2C4YMSLkthjT4TcR4d9yjiwRXhUq5G+heYjKSIpisMgj6mZ+JftUYNZ6p7OeVrAgMBAAECgYAF03vdCt4DWeJLm9jRdxuNJw9QA7VkQopze+S8OeS5YZnZuNyJHTWsuDOqsmrqtF92jvGNyPHA6A1AOApi8EiJfXy4ZFM+si/VauSIsuI/1ObOcnPGm0f/x96inV89vTnYYDl6wjHW2+463/v3fuW8ya2cqkMxKXI6U16+oJ0MKQJBAMN15Y8rMZ2N6+rDt+T8S46szTJp7AFzBAMm35orTE8DK9RwkyfkdI3UOTNicWd+kH2IIBMPueqWiwJP2xsgZ/kCQQDSdbS0aqIIS4118KsjPe9sIRJilCt7+M7A/OWJ5cveVRWFxiSP0NWkj4Z+tyg+qtfDD3xyEbTb92nV2HqsgHmDAkEAgBM9o21bKnD3WDJ8yhejbs69+j27vkteIq6TL9MVQmTCkIZfdnFVCiY4gPoNcxJUnVzYH4VbfmK8nXw0BvdaCQJAdo1RdpPepFeS3w3sCVUZKkrS5W7bs+Dq7nFHB8/HcH1zO0DrVYvo3OLwey7HX82y7rEpg8QPoh0TpB9mswdH6wJAIHKkptiTwYGT/AqNUZOLJ5GSpi4HY2FQ+kZ9Vn4e93sO5Y0GTHkwdd0uxL79Kdpvgke+dk8PcAsRs7rYBovS9w==";
+
+    public static String publicKey;  //公钥
+    public static String privateKey; //私钥
+
+    /**
+     * 用于密钥生成
+     * 项目启动后自动生成密钥
+     * 每小时定时更新密钥
+     * 经过我不科学的计算，本机生成一次密钥大约10ms
+     * 遂我认为我们可以大幅提高密钥更新的频率进而提高安全性。
+     * 在本机这种理想环境，每秒更换一次密钥基本不会对登录注册产生任何影响。
+     * 实际请考虑网络延迟、服务端性能、客户端性能等复杂因素的影响
+     */
+    @PostConstruct
+    @Scheduled(cron="0 0 0/1 * * ?")
+    public void createKey() {
+        Map<String, String> keys = RSAUtils.createKeys(1024);
+        publicKey = keys.get("publicKey");
+        privateKey = keys.get("privateKey");
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
 }
