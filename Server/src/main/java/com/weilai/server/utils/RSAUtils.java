@@ -1,5 +1,6 @@
 package com.weilai.server.utils;
 
+import com.weilai.server.exception.CustomException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
@@ -99,7 +100,7 @@ public class RSAUtils {
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), privateKey.getModulus().bitLength()), CHARSET);
         } catch (Exception e) {
-            throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
+            throw new CustomException("Error","登陆失败，出现异常！");
         }
     }
 
