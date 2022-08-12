@@ -9,16 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.management.Query;
-
 @Service
 public class AsyncService {
 
-    @Autowired
     private LoginMapper loginMapper;
+    @Autowired
+    public void setLoginMapper(LoginMapper loginMapper) {
+        this.loginMapper = loginMapper;
+    }
+
+    private DepartmentMapper departmentMapper;
 
     @Autowired
-    private DepartmentMapper departmentMapper;
+    public void setDepartmentMapper(DepartmentMapper departmentMapper) {
+        this.departmentMapper = departmentMapper;
+    }
 
     @Async
     public void createData(String email) {
