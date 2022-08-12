@@ -1,28 +1,21 @@
 package com.weilai.server;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.weilai.server.mapper.LoginMapper;
 import com.weilai.server.pojo.Department;
 import com.weilai.server.pojo.Login;
 import com.weilai.server.service.DepartmentService;
 import com.weilai.server.service.LoginService;
-import com.weilai.server.service.LoginServiceImpl;
+import com.weilai.server.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.DigestUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.weilai.server.utils.AesEncryptUtils.decrypt;
 import static com.weilai.server.utils.AesEncryptUtils.encrypt;
@@ -135,15 +128,58 @@ class ServerApplicationTests {
         Map<String,String> map=new HashMap<>();
         map.put("key","value");
         map.put("中文","汉字");
-        String content = JSONObject.toJSONString(map);
-        System.out.println("加密前：" + content);
 
-        String encrypt = encrypt(content);
+        System.out.println("加密前：" + map);
+
+        String encrypt = encrypt(map.toString());
         System.out.println("加密后：" + encrypt);
 
         String decrypt = decrypt(encrypt);
         System.out.println("解密后：" + decrypt);
     }
 
+    @Autowired
+    private RedisUtil redisUtil;
+    @Test
+    public void redisTest() {
+        System.out.println(redisUtil.get("1659944841818660"));
+        System.out.println(redisUtil.get("1659944841818660PW"));
+    }
+
+
+//    事实证明sha3_256Hex不会比MD5慢很多
+    @Test
+    public void digest() {
+        long time1 = new Date().getTime();
+        for (int i = 0; i < 10000; i++) {
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11213ASVBBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdAH1234ET34TG3RGFJKdasfhvnaernBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdmlanglndasflkbnvalXSDFGevnasdiofSNLNKLaANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11213ASBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdVBAashoduhv893qhljH1234ET34TGsdhfvBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd809q34rg3RGFJKHGFSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("112BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd13ASVBAashoduhv893qhljH1234ET34BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdTGsdhfv809q34rg3RGFJW45KSNLdfb34yghNKLasdANLWNDBAKJS1415asd161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("112BBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd13ASVBAashoduhv893qhljH1234ET34TGsdhfv8BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd09q34rg3RGFJKsdfgSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("1121BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd3ASVBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdANLWNDASDFBABAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234ET34BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdTGsdhfv809q34rg3RGQWER5GWERDHFJKSNLdfb34yghNKLasdANLASDVAWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("112BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd13ASVBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3ASDFsdfvbsRGFJKSNLdBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFASDFJKSNLdfb34yghNKLasdANLWNDBAKJS1BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234ETBAashoduhv893qhljHBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd34TGsdhfv8sdfvb09q34ASDVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11213ASVBAashoduhv893qhljH1234ET34BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdTGsdhfvbsdcvb809q34ASeDVAWERrg3RGFJKSNLdfbBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234ETBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd34TGsdhfvsdfg809q34ASDVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234ETBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd34TGsdhfvsdfg809q34ASDVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234ETBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd34TGsdhfvsdfg809q34ASDVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdb34yghNKLasd213ASVBAashoduhv893qhljH1234ETBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd34TGsdhfvsdfg809q34ASDVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljHz123BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd4ET34TGsdhfvsdfg809q34ASDVAWERrfg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11213ASVBAashoduhv893qhljH1234sBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdET34TGsdhfvsdfg809q34ASDVAWERrg3RvGFJKSNLdfb34yBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234fET34TGsdhfvsdfg809qr34ASDVAWERrg3RGFJKSNLdfb3BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd4yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH12BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd34ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234fET34TGsdhfvsdfg809qr34ASDVAWERrg3RGFJKSNLdfb3BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd4yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234fET34TGsdhfvsdfg809qr34ASDVAWERrg3RGFJKSNLdfb3BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd4yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGBAashoduhv893qhlBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdjH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234fET34TGsdhfvsdfg809qr34ASDVAWERrg3RGFJKSNLdfb3BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd4yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11213ASVBAashoduhv893qhljH1234BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdET34TGsdhfsdfgv809q34ASDBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH1234EBAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasdT34TGsdhsdbfv809q34ASDVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+            org.apache.commons.codec.digest.DigestUtils.sha3_256Hex("11BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd213ASVBAashoduhv893qhljH123BAashoduhv893qhljH1234ET34TGsdhfv809q34rg3RGFJKdfgSNLdfb34yghNKLasd4ET34TGsdhsdfgfv809q34ASDVAWERrg3RGFJKSNLdfb34yghNKLasdANLWNDBAKJS1415161");
+        }
+        long time2 = new Date().getTime();
+        System.out.println(time2 - time1);
+        System.out.println(time1);
+        System.out.println(time2);
+    }
 
 }
