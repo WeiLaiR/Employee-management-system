@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Department> implements DepartmentService {
-
-    @Autowired
+    //    更改为使用set方法注入
     private DepartmentMapper departmentMapper;
+    @Autowired
+    public void setDepartmentMapper(DepartmentMapper departmentMapper){
+        this.departmentMapper = departmentMapper;
+    }
     @Override
     public boolean addOrUpdateDep(Department department) {
         if (department.getEid() == null){
