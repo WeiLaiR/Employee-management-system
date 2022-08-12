@@ -1,4 +1,5 @@
 import axios from 'axios'
+import ElementUI from "element-ui";
 
 const request = axios.create({
     baseURL: 'http://localhost:8888',
@@ -33,6 +34,16 @@ request.interceptors.response.use(
         if (typeof res === 'string') {
             res = res ? JSON.parse(res) : res
         }
+
+        if (res.state === "Error") {
+            ElementUI.Message({
+                type: 'error',
+                message: res.message
+            })
+        }
+
+
+
         return res;
     },
     error => {
