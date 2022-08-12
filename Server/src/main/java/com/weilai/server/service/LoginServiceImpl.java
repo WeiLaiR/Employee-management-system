@@ -35,7 +35,12 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     public void setRedisUtil(RedisUtil redisUtil) {
         this.redisUtil = redisUtil;
     }
-    RSA rsa = new RSA();
+
+    private RSA rsa;
+    @Autowired
+    public void setRsa(RSA rsa) {
+        this.rsa = rsa;
+    }
 
 //    没有使用Bcrypt
 //    使用的是SHA3-256
@@ -43,7 +48,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     @Override
     public Map<String, Object> loginEmp(String email, String password) throws Exception {
 //      获取私钥，解密数据
-        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(rsa.privateKey);
+        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(rsa.getPrivateKey());
         String pw = RSAUtils.privateDecrypt(password, privateKey);
         HashMap<String, Object> map = new HashMap<>();
         QueryWrapper<Login> wrapper = new QueryWrapper<>();
@@ -68,7 +73,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     @Override
     public Map<String, Object> registerEmp(String email, String password) throws Exception {
         //      获取私钥，解密数据
-        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(rsa.privateKey);
+        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(rsa.getPrivateKey());
         String pw = RSAUtils.privateDecrypt(password, privateKey);
 
         QueryWrapper<Login> wrapper = new QueryWrapper<>();
