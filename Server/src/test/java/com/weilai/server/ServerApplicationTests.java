@@ -7,6 +7,7 @@ import com.weilai.server.pojo.Department;
 import com.weilai.server.pojo.Login;
 import com.weilai.server.service.DepartmentService;
 import com.weilai.server.service.LoginService;
+import com.weilai.server.utils.RSAUtils;
 import com.weilai.server.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -147,7 +148,7 @@ class ServerApplicationTests {
     }
 
 
-//    事实证明sha3_256Hex不会比MD5慢很多
+//    事实证明sha3_256Hex不会比MD5慢很多(4倍速度差？)
     @Test
     public void digest() {
         long time1 = new Date().getTime();
@@ -180,6 +181,19 @@ class ServerApplicationTests {
         System.out.println(time2 - time1);
         System.out.println(time1);
         System.out.println(time2);
+    }
+
+
+//    本机测试生成1000次大概十秒
+//    那么不科学的预计的话，生成一次大概10ms，速度还行
+    @Test
+    public void rsaSpeedTest() {
+        long time = new Date().getTime();
+        for (int i = 0; i < 1000; i++) {
+            Map<String, String> keys = RSAUtils.createKeys(1024);
+        }
+        long time2 = new Date().getTime();
+        System.out.println(time2 - time);
     }
 
 }
