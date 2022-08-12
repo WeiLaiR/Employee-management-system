@@ -52,48 +52,62 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+          { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
         ],
       }
     }
   },
-  created() {
-    //请求后端发送公钥
-    request.post("/RSA/getPublicKey").then(res => {
-      this.publicKey = res.publicKey
-    })
-  },
   methods: {
-    login() {
-      this.$refs['empForm'].validate((valid) => {
-        if (valid) {  // 表单校验合法
+     login() {
+       this.$refs['empForm'].validate(async (valid) => {
+         if (valid) {  // 表单校验合法
 
-          //对数据进行MD5加密
-          this.loginEmp.md5PW = this.$md5(this.loginEmp.password)
+           //请求后端发送公钥
+           //注意！！！这里必须加await来等待异步任务执行完成，也就是将当前任务设置为同步，不然axios默认异步执行！！！
+           await request.post("/RSA/getPublicKey").then(res => {
+             this.publicKey = res.publicKey
+           })
 
-          console.log(this.publicKey)
-          //对已进行MD5加密的密码进行不对称加密
-          let encrypt = new JSEncrypt();
-          encrypt.setPublicKey(this.publicKey)
-          this.loginEnc.encryptPW = encrypt.encrypt(this.loginEmp.md5PW)
-          this.loginEnc.encryptPW = encrypt.encrypt(this.loginEmp.md5PW)
-          console.log(this.loginEnc.encryptPW)
-          this.loginEnc.email = this.loginEmp.email
+           // 进行简单的加盐
+           let temp = ""
+           for (let i = 0; i < this.loginEmp.password.length; i++) {
+             temp += i * i + temp.length + this.loginEmp.password.length ^ 66
+             temp += String.fromCharCode((i * temp.length * 3 + 6) % 24 + 97)
+             temp += (this.loginEmp.password.charAt(i) + 16) ^ (this.loginEmp.password.length * temp.length % 150 + 8)
+             if (i * temp.length % 2 === 0) {
+               temp += (this.loginEmp.password.charAt(i) + 66) ^ (i * temp.length % 300 + 6) + 8
+             }
+             temp += String.fromCharCode( (temp.length - i) * temp.length % 24 + 65)
+           }
+           console.log(temp)
 
-          request.post("/login/login/", this.loginEnc).then(res => {
-            console.log(res)
-            if (res.state === "Success") {
-              localStorage.setItem("eid", res.eid)
-              this.$router.push("/")
-              this.$message.success("登陆成功!")
-            }else {
-              this.$message.error("用户名或密码错误")
-            }
-          })
-        } else {
-          return false;
-        }
-      });
+           //对数据进行SHA256加密
+           let sha256PW = this.$SHA256(temp)
+
+           console.log(sha256PW)
+
+           //对已进行SHA256加密的密码进行不对称加密
+           let encrypt = new JSEncrypt();
+           encrypt.setPublicKey(this.publicKey)
+           this.loginEnc.encryptPW = encrypt.encrypt(sha256PW)
+           this.loginEnc.email = this.loginEmp.email
+
+           console.log(this.loginEnc.encryptPW)
+
+           request.post("/login/login", this.loginEnc).then(res => {
+             console.log(res)
+             if (res.state === "Success") {
+               localStorage.setItem("token", res.token)
+               this.$router.push("/")
+               this.$message.success("登陆成功!")
+             } else {
+               this.$message.error(res.message)
+             }
+           })
+         } else {
+           return false;
+         }
+       });
     }
   }
 }
