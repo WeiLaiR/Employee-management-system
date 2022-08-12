@@ -8,8 +8,8 @@
         <el-breadcrumb-item>{{currentPathName}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-dropdown style="width: 70px; cursor: pointer">
-      <span>{{ emp.name }}<i class="el-icon-arrow-down" style="margin-left: 5px"></i></span>
+    <el-dropdown style="width: 150px; cursor: pointer">
+      <span style="float: right">{{ emp.name }}<i class="el-icon-arrow-down" style="margin-left: 5px"></i></span>
       <el-dropdown-menu slot="dropdown" style="width: 100px; text-align: center">
         <el-dropdown-item style="font-size: 14px; padding: 5px 0">
           <span @click="$router.push('/pInformation')">个人信息</span>
@@ -29,7 +29,6 @@ export default {
   name: "Header",
   data() {
     return {
-      eid: localStorage.getItem("eid"),
       emp: {
         name: ""
       }
@@ -51,17 +50,22 @@ export default {
   },
   created() {
     if (this.eid !== null){
-      this.request.post("/department/getById", this.eid).then(res => {
+      this.request.post("/department/getById").then(res => {
         console.log(res)
         this.emp.name = res.name == null ? "新用户" : res.name
       })
     }
   },
   methods: {
-    logout() {
-      this.$router.push("/login")
-      localStorage.removeItem("eid")
-      this.$message.success("Logout Success!")
+    async logout() {
+      await this.$router.push("/login")
+      //需同步执行
+      await this.request.post("/login/logout").then(res => {
+        if (res) {
+          this.$message.success("Logout Success!")
+        }
+      })
+      localStorage.removeItem("token")
     }
   }
 }
