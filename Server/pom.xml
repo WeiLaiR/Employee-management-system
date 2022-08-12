@@ -127,24 +127,6 @@
 
 
 
-
-
-
-
-
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-        <!--    目前在主体代码内没有使用！仅在测试中使用过    -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>2.0.11</version>
-        </dependency>
-
-
-
-
-
-
     </dependencies>
 
     <build>
