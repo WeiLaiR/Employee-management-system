@@ -50,7 +50,7 @@ export default {
   },
   created() {
     if (this.eid !== null){
-      this.request.post("/department/getById").then(res => {
+      this.request.post("/department/get").then(res => {
         console.log(res)
         this.emp.name = res.name == null ? "新用户" : res.name
       })
