@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.weilai.server.mapper.LoginMapper;
 import com.weilai.server.pojo.Department;
+import com.weilai.server.pojo.Information;
 import com.weilai.server.pojo.Login;
 import com.weilai.server.service.DepartmentService;
+import com.weilai.server.service.InformationService;
 import com.weilai.server.service.LoginService;
 import com.weilai.server.utils.RSAUtils;
 import com.weilai.server.utils.RedisUtil;
@@ -31,6 +33,9 @@ class ServerApplicationTests {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private InformationService informationService;
 
     @Test
     void contextLoads() {
@@ -123,6 +128,25 @@ class ServerApplicationTests {
             departmentService.save(department);
         }
     }
+
+    @Test
+    public void InformationTest01() {
+        Information information = new Information();
+        information.setEid(1234567L);
+        information.setBriefIntroduction("我最帅");
+        information.setNickName("大帅逼");
+        information.setPhoneNumber("139红酒白酒葡萄酒");
+        information.setSex(true);
+        information.setAge((short) 20);
+        System.out.println(informationService.save(information));
+    }
+
+    @Test
+    public void InformationTest02() {
+        System.out.println(informationService.getById(1234567L));
+    }
+
+
 
     @Test
     public void AesTest() throws Exception {
