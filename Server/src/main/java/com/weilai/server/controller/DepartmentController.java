@@ -46,7 +46,21 @@ public class DepartmentController {
     }
 
     @PostMapping("/getById")
-    public Map<String,Object> getById() {
+    public Map<String,Object> getById(@RequestBody Long eid) {
+        HashMap<String, Object> map = new HashMap<>();
+        Department department = departmentService.getById(eid);
+        if (department != null){
+            map.put("name",department.getName());
+            map.put("eid",department.getEid());
+            map.put("department",department.getDepartment());
+            map.put("post",department.getPost());
+        }
+        return map;
+    }
+
+
+    @PostMapping("/get")
+    public Map<String,Object> get() {
         Long eid = TokenUtils.getId();
         HashMap<String, Object> map = new HashMap<>();
         Department department = departmentService.getById(eid);
