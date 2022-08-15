@@ -15,10 +15,10 @@
 <!--      <el-button class="ml-5" type="primary" @click="loadData">搜索</el-button>-->
       <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
       <div style="display:inline; margin: 0 10px;float: right">
-        <el-button type="primary" @click="openAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
+        <el-button type="success" @click="openAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
         <el-button type="danger" @click="deleteDeps">批量删除 <i class="el-icon-remove-outline"></i></el-button>
-        <el-button type="primary">导入 <i class="el-icon-bottom"></i></el-button>
-        <el-button type="primary">导出 <i class="el-icon-top"></i></el-button>
+<!--        <el-button type="primary">导入 <i class="el-icon-bottom"></i></el-button>-->
+<!--        <el-button type="primary">导出 <i class="el-icon-top"></i></el-button>-->
       </div>
     </div>
 
@@ -41,7 +41,8 @@
       </el-table-column>
       <el-table-column label="操作"  width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="success" @click="openEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
+          <el-button type="primary" @click="showInformation(scope.row)">详情 <i class="el-icon-s-order"></i></el-button>
+<!--          <el-button type="success" @click="openEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>-->
           <el-button type="danger" @click="deleteDep(scope.row)">删除 <i class="el-icon-remove-outline"></i></el-button>
         </template>
       </el-table-column>
@@ -62,7 +63,7 @@
     <el-dialog title="新增员工信息" :visible.sync="dialogFormVisible" width="500px" >
       <el-form label-width="120px" size="small">
         <el-form-item label="姓名" style="width: 330px">
-          <el-input v-model="newDep.name" autocomplete="off" ></el-input>
+          <el-input v-model="newDep.name" autocomplete="off" :disabled="true" ></el-input>
         </el-form-item>
         <el-form-item label="部门" style="width: 330px">
           <el-select v-model="newDep.department" clearable placeholder="请选择部门" style="width: 210px">
@@ -81,6 +82,183 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="addDep">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
+
+
+    <el-dialog title="员工信息" :visible.sync="dialogInformation" width="750px" >
+
+      <el-form label-width="60px"  style="padding: 8px 25px;">
+
+        <div style="margin: 23px 8px">
+          <div style="display: inline-block;padding-right: 15px">
+            <p>姓 名：</p>
+            <el-input
+                size="small"
+                v-model="newDep.name"
+                autocomplete="off"
+                maxlength="8"
+                :disabled="true"
+                style="width: 150px;display: inline-block">
+            </el-input>
+          </div>
+
+          <div style="display: inline-block;padding-right: 15px">
+            <p>性 别：</p>
+            <el-input
+                size="small"
+                v-model="newInformation.sex"
+                autocomplete="off"
+                maxlength="8"
+                :disabled="true"
+                style="width: 150px;display: inline-block">
+            </el-input>
+          </div>
+
+          <div style="display: inline-block">
+            <p>年 龄：</p>
+            <el-input size="small" min="0" max="200" :disabled="true" v-model="newInformation.age" autocomplete="off" style="width: 150px;display: inline-block">
+            </el-input>
+          </div>
+        </div>
+
+
+        <div style="margin: 23px 8px">
+          <div style="display: inline-block;padding-right: 15px">
+            <p>昵 称：</p>
+            <el-input
+                size="small"
+                v-model="newInformation.nickName"
+                autocomplete="off"
+                maxlength="8"
+                :disabled="true"
+                style="width: 150px;display: inline-block">
+            </el-input>
+          </div>
+
+          <div style="display: inline-block;padding-right: 15px">
+            <p>学 历：</p>
+            <el-input
+                size="small"
+                v-model="newInformation.education"
+                autocomplete="off"
+                maxlength="8"
+                :disabled="true"
+                style="width: 150px;display: inline-block">
+            </el-input>
+          </div>
+
+          <div style="display: inline-block">
+            <p>电 话：</p>
+            <el-input size="small"
+                      v-model="newInformation.phoneNumber"
+                      autocomplete="off"
+                      maxlength="15"
+                      :disabled="true"
+                      style="width: 150px;display: inline-block">
+            </el-input>
+          </div>
+        </div>
+
+        <div style="margin: 23px 8px">
+          <div style="display: inline-block;padding-right: 15px">
+            <p>部 门：</p>
+
+            <el-select size="small" v-model="newDep.department" clearable placeholder="请选择部门" style="width: 257px">
+              <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.value"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+
+          </div>
+
+          <div style="display: inline-block">
+            <p>岗 位：</p>
+            <el-input
+                size="small"
+                v-model="newDep.post"
+                autocomplete="off"
+                style="width: 257px">
+            </el-input>
+          </div>
+        </div>
+
+        <div style="margin: 13px 8px">
+          <div style="display: inline-block;padding-right: 15px">
+            <p style="display: block;color: #555;margin-bottom: 5px">住 址：</p>
+            <el-input
+                size="small"
+                v-model="newInformation.address"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                placeholder="请输入内容"
+                maxlength="70"
+                :disabled="true"
+                style="width: 572px;margin-left: 43px">
+            </el-input>
+          </div>
+        </div>
+
+        <div style="margin: 13px 8px">
+          <div style="display: inline-block;padding-right: 15px">
+            <p style="display: block;color: #555;margin-bottom: 5px">简 介：</p>
+            <el-input
+                size="small"
+                v-model="newInformation.briefIntroduction"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                placeholder="请输入内容"
+                maxlength="70"
+                :disabled="true"
+                style="width: 572px;margin-left: 43px">
+            </el-input>
+          </div>
+        </div>
+
+
+        <div style="margin: 13px 8px">
+          <div style="display: inline-block;padding-right: 15px">
+            <p style="display: block;color: #555;margin-bottom: 5px">爱 好：</p>
+            <el-input
+                size="small"
+                v-model="newInformation.hobby"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                placeholder="请输入内容"
+                maxlength="70"
+                :disabled="true"
+                style="width: 572px;margin-left: 43px">
+            </el-input>
+          </div>
+        </div>
+
+
+        <div style="margin: 13px 8px">
+          <div style="display: inline-block;padding-right: 15px">
+            <p style="display: block;color: #555;margin-bottom: 5px">备 注：</p>
+            <el-input
+                size="small"
+                v-model="newInformation.remarks"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                placeholder="请输入内容"
+                maxlength="70"
+                :disabled="true"
+                style="width: 572px;margin-left: 43px">
+            </el-input>
+          </div>
+        </div>
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogInformation = false">取 消</el-button>
+        <el-button type="primary" @click="clickUpdate">修 改</el-button>
       </div>
     </el-dialog>
 
@@ -121,9 +299,27 @@ export default {
         value: '财务部'
       }],
       depValue: "",
-      newDep: {},
+      newDep: {
+        eid: 0,
+        name: "",
+        department: "",
+        post: ""
+      },
       Deps: {},
       dialogFormVisible: false,
+      dialogInformation: false,
+      newInformation: {
+        eid: 0,
+        sex: "",
+        age: 0,
+        education: "",
+        phoneNumber: "",
+        nickName: "",
+        address: "",
+        hobby: "",
+        briefIntroduction: "",
+        remarks: ""
+      }
     }
   },
   watch: {
@@ -248,6 +444,36 @@ export default {
         }
       })
     },
+    showInformation(row) {
+
+      request.post("/department/getById",row.eid).then(res => {
+        console.log(res)
+        this.newDep.eid = res.eid
+        this.newDep.department = res.department
+        this.newDep.name = res.name
+        this.newDep.post = res.post
+      })
+
+      request.post("/information/getInformationById",row.eid).then(res => {
+        console.log(res)
+        this.newInformation.eid = res.eid
+        this.newInformation.sex = res.sex === true ? "男" : "女"
+        this.newInformation.age = res.age
+        this.newInformation.education = res.education
+        this.newInformation.phoneNumber = res.phoneNumber
+        this.newInformation.nickName = res.nickName
+        this.newInformation.address = res.address
+        this.newInformation.hobby = res.hobby
+        this.newInformation.briefIntroduction = res.briefIntroduction
+        this.newInformation.remarks = res.remarks
+      })
+
+      this.dialogInformation = true
+    },
+    clickUpdate() {
+      this.addDep()
+      this.dialogInformation = false
+    }
 
   }
 }
@@ -256,5 +482,10 @@ export default {
 <style>
 .headerBg {
   background: #eee!important;
+}
+p {
+  display: inline-block;
+  font-size: small;
+  color: #666;
 }
 </style>
