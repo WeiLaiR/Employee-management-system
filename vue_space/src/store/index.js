@@ -4,12 +4,14 @@ import { createStore } from 'vuex'
 const store = createStore({
     state () {
         return {
-            currentPathName: ''
+            currentPathName: '',
+            empNameValue: ''
         }
     },
     mutations: {
         setPath (state) {
             state.currentPathName = localStorage.getItem("currentPathName")
+            state.empNameValue = localStorage.getItem("empName")
         }
     }
 })
