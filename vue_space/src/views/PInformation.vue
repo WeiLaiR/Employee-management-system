@@ -172,6 +172,7 @@
 
 <script>
 import request from "@/utils/request";
+import store from "@/store";
 
 export default {
   name: "PInformation",
@@ -261,7 +262,8 @@ export default {
 
       if (sign) {
         this.$message.success("修改成功！")
-        this.$router.push('/')
+        localStorage.setItem("empName", this.newDep.name)
+        store.commit("setPath")
       }else {
         this.$message.error("出现了未知错误，请稍后再试！")
       }
