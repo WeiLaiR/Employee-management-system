@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </div>
     <el-dropdown style="width: 150px; cursor: pointer">
-      <span style="float: right">{{ emp.name }}<i class="el-icon-arrow-down" style="margin-left: 5px"></i></span>
+      <span style="float: right">{{ empName }}<i class="el-icon-arrow-down" style="margin-left: 5px"></i></span>
       <el-dropdown-menu slot="dropdown" style="width: 100px; text-align: center">
         <el-dropdown-item style="font-size: 14px; padding: 5px 0">
           <span @click="$router.push('/pInformation')">个人信息</span>
@@ -31,7 +31,7 @@ export default {
     return {
       emp: {
         name: ""
-      }
+      },
     }
   },
   props: {
@@ -41,11 +41,17 @@ export default {
   computed: {
     currentPathName () {
       return store.state.currentPathName;　　//需要监听的数据
+    },
+    empName () {
+      return store.state.empNameValue;
     }
   },
   watch: {
     currentPathName (newVal, oldVal) {
       console.log(newVal)
+    },
+    empName (newName,oldName) {
+      console.log(newName)
     }
   },
   created() {
@@ -53,6 +59,8 @@ export default {
       this.request.post("/department/get").then(res => {
         console.log(res)
         this.emp.name = res.name == null ? "新用户" : res.name
+        localStorage.setItem("empName", this.emp.name)
+        store.commit("setPath")
       })
     }
   },
