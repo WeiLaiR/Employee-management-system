@@ -2,9 +2,11 @@ package com.weilai.server.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.weilai.server.exception.CustomException;
+import com.weilai.server.mapper.AuthorityMapper;
 import com.weilai.server.mapper.DepartmentMapper;
 import com.weilai.server.mapper.InformationMapper;
 import com.weilai.server.mapper.LoginMapper;
+import com.weilai.server.pojo.Authority;
 import com.weilai.server.pojo.Department;
 import com.weilai.server.pojo.Information;
 import com.weilai.server.pojo.Login;
@@ -33,6 +35,12 @@ public class AsyncService {
         this.informationMapper = informationMapper;
     }
 
+    private AuthorityMapper authorityMapper;
+    @Autowired
+    public void setAuthorityMapper(AuthorityMapper authorityMapper) {
+        this.authorityMapper = authorityMapper;
+    }
+
     @Async
     public void createData(String email) {
         QueryWrapper<Login> wrapper = new QueryWrapper<>();
@@ -53,6 +61,11 @@ public class AsyncService {
             sign = true;
         }
 
+        Authority authority = new Authority();
+        authority.setEid(login.getEid());
+        if (authorityMapper.insert(authority) < 1) {
+            sign = true;
+        }
 
 
         if (sign) {
