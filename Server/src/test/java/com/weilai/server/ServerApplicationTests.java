@@ -67,7 +67,6 @@ class ServerApplicationTests {
         Login login = new Login();
         login.setEmail("12345678@gmail.com");
         login.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        login.setLevel(2);
         System.out.println(loginMapper.insert(login));
     }
 
@@ -92,7 +91,6 @@ class ServerApplicationTests {
         Login login = new Login();
         login.setEmail("1@gmail.com");
         login.setPassword("123456");
-        login.setLevel(2);
         loginService.save(login);
     }
 
