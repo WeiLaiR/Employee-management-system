@@ -4,7 +4,7 @@
 
     <el-row style="height: 180px;">
       <el-card style="height: 170px;" id="building" >
-        <div  style="font-weight: bolder;font-size: 35px;color: antiquewhite;margin: 60px 90px">{{greet}},{{name}},来一把紧张刺激的派派吧！</div>
+        <div  style="font-weight: bolder;font-size: 35px;color: antiquewhite;margin: 60px 90px">{{greet}},{{empName}},来一把紧张刺激的派派吧！</div>
       </el-card>
     </el-row>
 
@@ -85,6 +85,7 @@
 <script>
 
 import * as echarts from 'echarts'
+import store from "@/store";
 
 
 export default {
@@ -94,6 +95,11 @@ export default {
       greet: "",
       name: "",
 
+    }
+  },
+  computed: {
+    empName () {
+      return store.state.empNameValue;
     }
   },
   created() {
