@@ -388,7 +388,6 @@ export default {
           }else {
             this.$message.success("更新员工信息成功")
           }
-          this.dialogFormVisible = false
           this.loadData()
         }else {
           this.$message.error("新增员工失败")
