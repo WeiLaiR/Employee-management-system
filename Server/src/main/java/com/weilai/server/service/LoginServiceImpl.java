@@ -3,7 +3,9 @@ package com.weilai.server.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.weilai.server.exception.CustomException;
+import com.weilai.server.mapper.AuthorityMapper;
 import com.weilai.server.mapper.LoginMapper;
+import com.weilai.server.pojo.Authority;
 import com.weilai.server.pojo.Login;
 import com.weilai.server.utils.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -27,6 +29,12 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     @Autowired
     public void setLoginMapper(LoginMapper loginMapper){
         this.loginMapper = loginMapper;
+    }
+
+    private AuthorityMapper authorityMapper;
+    @Autowired
+    public void setAuthorityMapper(AuthorityMapper authorityMapper) {
+        this.authorityMapper = authorityMapper;
     }
 
 
@@ -57,9 +65,12 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
         if (emp != null){
             if (DigestUtils.sha3_256Hex(pw).equals(emp.getPassword())){
+                Authority authority = authorityMapper.selectById(emp.getEid());
+
                 String token = TokenUtils.getToken(emp.getEid(), emp.getEmail());
                 redisUtil.set(emp.getEid().toString(), token,TIMEOUT);
                 map.put("token",token);
+                map.put("authority",authority.getAuthority());
                 map.put("state","Success");
             }else {
                 throw new CustomException("ErrorLogin","用户名或密码错误！");
