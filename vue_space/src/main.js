@@ -10,6 +10,7 @@ import request from "@/utils/request";
 import store from "./store/index";
 import JSEncrypt from 'jsencrypt';
 import SHA256 from 'js-sha256'
+import './router/permission'
 
 Vue.config.productionTip = false
 
