@@ -12,11 +12,17 @@
       <span style="float: right">{{ empName }}<i class="el-icon-arrow-down" style="margin-left: 5px"></i></span>
       <el-dropdown-menu slot="dropdown" style="width: 100px; text-align: center">
         <el-dropdown-item style="font-size: 14px; padding: 5px 0">
-          <span @click="$router.push('/pInformation')">个人信息</span>
+          <div style="width: 100%;height: 100%" @click="$router.push('/pInformation')">
+            <span >个人信息</span>
+          </div>
         </el-dropdown-item>
+
         <el-dropdown-item style="font-size: 14px; padding: 5px 0" >
-          <span @click="logout">注销登录</span>
+          <div style="width: 100%;height: 100%" @click="logout">
+            <span >注销登录</span>
+          </div>
         </el-dropdown-item>
+
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -66,7 +72,6 @@ export default {
   },
   methods: {
     async logout() {
-      await this.$router.push("/login")
       //需同步执行
       await this.request.post("/login/logout").then(res => {
         if (res) {
@@ -74,6 +79,8 @@ export default {
         }
       })
       localStorage.removeItem("token")
+      localStorage.removeItem("authority")
+      await this.$router.push("/login")
     }
   }
 }
