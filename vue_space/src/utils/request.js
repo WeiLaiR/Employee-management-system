@@ -1,5 +1,6 @@
 import axios from 'axios'
 import ElementUI from "element-ui";
+import router from "@/router";
 
 const request = axios.create({
     baseURL: 'http://localhost:8888',
@@ -40,6 +41,12 @@ request.interceptors.response.use(
                 type: 'error',
                 message: res.message
             })
+        }else if (res.state === "401") {
+            ElementUI.Message({
+                type: 'error',
+                message: res.message
+            })
+            router.push("/401")
         }
 
 
