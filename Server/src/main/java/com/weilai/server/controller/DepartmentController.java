@@ -1,14 +1,10 @@
 package com.weilai.server.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.weilai.server.annotation.AuthorityAnnotation;
 import com.weilai.server.pojo.Department;
 import com.weilai.server.service.DepartmentService;
-import com.weilai.server.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,50 +27,20 @@ public class DepartmentController {
                                           @PathVariable("pageSize") Integer pageSize,
                                           @PathVariable("name") String name,
                                           @PathVariable("department") String dep){
-        QueryWrapper<Department> wrapper = new QueryWrapper<>();
-        if (!name.equals("null")){
-            wrapper.like("name",name);
-        }
-        if (!dep.equals("null")){
-            wrapper.eq("department",dep);
-        }
-        Page<Department> page = new Page<>(pageNum, pageSize);
-        departmentService.page(page,wrapper);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("total",page.getTotal());
-        map.put("values",page.getRecords());
-        map.put("size",page.getRecords().size());
-        return map;
+        return departmentService.getPage(pageNum,pageSize,name,dep);
     }
 
     @AuthorityAnnotation(sign = 2)
     @PostMapping("/getById")
     public Map<String,Object> getById(@RequestBody Long eid) {
-        HashMap<String, Object> map = new HashMap<>();
-        Department department = departmentService.getById(eid);
-        if (department != null){
-            map.put("name",department.getName());
-            map.put("eid",department.getEid());
-            map.put("department",department.getDepartment());
-            map.put("post",department.getPost());
-        }
-        return map;
+        return departmentService.getDepById(eid);
     }
 
 
     @AuthorityAnnotation(sign = 1)
     @PostMapping("/get")
     public Map<String,Object> get() {
-        Long eid = TokenUtils.getId();
-        HashMap<String, Object> map = new HashMap<>();
-        Department department = departmentService.getById(eid);
-        if (department != null){
-            map.put("name",department.getName());
-            map.put("eid",department.getEid());
-            map.put("department",department.getDepartment());
-            map.put("post",department.getPost());
-        }
-        return map;
+        return departmentService.getDep();
     }
 
 //    当前用于手动添加或更新员工信息，后期功能或许会调整(因为目前只用到更新，没用到添加)
