@@ -2,6 +2,7 @@ package com.weilai.server.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.weilai.server.annotation.AuthorityAnnotation;
 import com.weilai.server.pojo.Department;
 import com.weilai.server.service.DepartmentService;
 import com.weilai.server.utils.TokenUtils;
@@ -24,6 +25,7 @@ public class DepartmentController {
     }
 
 //    分页条件查询
+    @AuthorityAnnotation(sign = 2)
     @GetMapping("/getPage/{pageNum}/{pageSize}/{name}/{department}")
     public Map<String, Object> getPage(@PathVariable("pageNum") Integer pageNum,
                                           @PathVariable("pageSize") Integer pageSize,
@@ -45,6 +47,7 @@ public class DepartmentController {
         return map;
     }
 
+    @AuthorityAnnotation(sign = 2)
     @PostMapping("/getById")
     public Map<String,Object> getById(@RequestBody Long eid) {
         HashMap<String, Object> map = new HashMap<>();
@@ -59,6 +62,7 @@ public class DepartmentController {
     }
 
 
+    @AuthorityAnnotation(sign = 1)
     @PostMapping("/get")
     public Map<String,Object> get() {
         Long eid = TokenUtils.getId();
@@ -73,18 +77,20 @@ public class DepartmentController {
         return map;
     }
 
-//    当前用于手动添加或更新员工信息，后期功能会调整
+//    当前用于手动添加或更新员工信息，后期功能或许会调整(因为目前只用到更新，没用到添加)
     @PostMapping("/addDep")
     public boolean addDep(@RequestBody Department department){
         return departmentService.addOrUpdateDep(department);
     }
 
 
+    @AuthorityAnnotation(sign = 2)
     @PostMapping("/deleteDep")
     public boolean deleteDep(@RequestBody Long eid){
         return departmentService.removeById(eid);
     }
 
+    @AuthorityAnnotation(sign = 2)
     @PostMapping("/deleteDeps")
     public boolean deleteDeps(@RequestBody List<Department> list){
         return departmentService.removeByIds(list);
