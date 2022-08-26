@@ -87,7 +87,7 @@
 
 使用 jwt+拦截器+自定义注解进行鉴权，安全框架对本项目来说太笨重也太繁琐，所以手写即可。
 
-<img src="https://github.com/WeiLaiR/Employee-management-system/blob/master/image/6_1.png" alt="6_1" style="zoom:60%;" />
+![6_1](https://github.com/WeiLaiR/Employee-management-system/blob/master/image/6_1.png)
 
 总体流程可简化为上图。
 
