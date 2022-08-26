@@ -2,10 +2,12 @@ package com.weilai.server;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.weilai.server.mapper.LoginMapper;
 import com.weilai.server.pojo.Department;
 import com.weilai.server.pojo.Information;
 import com.weilai.server.pojo.Login;
+import com.weilai.server.service.ClockInService;
 import com.weilai.server.service.DepartmentService;
 import com.weilai.server.service.InformationService;
 import com.weilai.server.service.LoginService;
@@ -17,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.DigestUtils;
-
 import java.util.*;
 
 import static com.weilai.server.utils.AesEncryptUtils.decrypt;
@@ -37,8 +38,34 @@ class ServerApplicationTests {
     @Autowired
     private InformationService informationService;
 
+    private ClockInService clockInService;
+
     @Test
     void contextLoads() {
+    }
+
+    @Test
+    public void dateSearch() throws JsonProcessingException {
+        Date date = new Date();
+        long temp = date.getTime() % 86400000;
+        long temp1 = date.getTime() - temp - (3600000 * 8) - (5 * 86400000);
+        long temp2 = date.getTime() - temp + (3600000 * 16 - 1) - (5 * 86400000);
+        Date date1 = new Date(temp1);
+        Date date2 = new Date(temp2);
+        System.out.println(date1);
+        System.out.println(date2);
+        QueryWrapper<Information> wrapper = new QueryWrapper<>();
+        wrapper.ge("create_time",date1)
+                .le("create_time",date2);
+        List<Information> list = informationService.list(wrapper);
+        System.out.println(list);
+        System.out.println(list.size());
+
+    }
+
+    @Test
+    public void clockIn() {
+
     }
 
 
