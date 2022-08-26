@@ -145,11 +145,12 @@ class ServerApplicationTests {
 //  快速插入数据
     @Test
     public void MybatisPlusTest08_save() {
-        for (int i = 0; i < 36; i++) {
+        for (int i = 0; i < 7; i++) {
             Department department = new Department();
-            department.setName("马" + i);
-            department.setDepartment("采购部");
-            department.setPost("采购");
+            department.setEid(1661316910846660L + i);
+            department.setName("王" + i);
+            department.setDepartment("开发部");
+            department.setPost("后端开发");
             departmentService.save(department);
         }
     }
