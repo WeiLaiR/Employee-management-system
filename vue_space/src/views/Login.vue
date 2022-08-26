@@ -80,6 +80,8 @@ export default {
              temp += String.fromCharCode( ((this.loginEmp.password.charCodeAt(i) + i) * temp.length) % 24 + 65)
            }
 
+           console.log(temp)
+
            //对数据进行SHA256加密
            let sha256PW = this.$SHA256(temp)
 
@@ -93,6 +95,7 @@ export default {
              console.log(res)
              if (res.state === "Success") {
                localStorage.setItem("token", res.token)
+               localStorage.setItem("authority", res.authority)
                this.$router.push("/")
                this.$message.success("登陆成功!")
              } else {
