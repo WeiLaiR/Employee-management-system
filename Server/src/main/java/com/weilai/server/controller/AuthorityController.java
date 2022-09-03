@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/authority")
+@RequestMapping("/server/authority")
 public class AuthorityController {
 
     private AuthorityService authorityService;

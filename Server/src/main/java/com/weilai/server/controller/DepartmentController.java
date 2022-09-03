@@ -10,7 +10,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/department")
+@RequestMapping("/server/department")
 public class DepartmentController {
 
     //    更改为使用set方法注入

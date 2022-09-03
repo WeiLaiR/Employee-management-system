@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/information")
+@RequestMapping("/server/information")
 public class InformationController {
 
     private InformationService informationService;

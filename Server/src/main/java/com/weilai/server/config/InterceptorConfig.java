@@ -15,12 +15,12 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtInterceptor())
 //               拦截所有请求并判断Token是否合法
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login/login", "/login/register", "/RSA/getPublicKey")
+                .excludePathPatterns("/server/login/login", "/server/login/register", "/server/RSA/getPublicKey")
 //               设置拦截器优先级(越小越高)
                 .order(0);
         registry.addInterceptor(authorityInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login/login", "/login/register", "/RSA/getPublicKey")
+                .excludePathPatterns("/server/login/login", "/server/login/register", "/server/RSA/getPublicKey")
                 .order(10);
     }
 

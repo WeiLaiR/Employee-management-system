@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/server/login")
 public class LoginController {
 
 //    更改为使用set方法注入

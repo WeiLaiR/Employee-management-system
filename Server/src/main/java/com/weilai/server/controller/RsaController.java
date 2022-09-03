@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/RSA")
+@RequestMapping("/server/RSA")
 public class RsaController {
     private RSA rsa;
     @Autowired

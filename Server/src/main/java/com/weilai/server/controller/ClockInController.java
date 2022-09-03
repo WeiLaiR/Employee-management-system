@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/clock")
+@RequestMapping("/server/clock")
 public class ClockInController {
 
     private ClockInService clockInService;
