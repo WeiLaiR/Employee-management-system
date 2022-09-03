@@ -4,6 +4,10 @@ server:
 
 # 连接数据库
 spring:
+  application:
+    name: Server
+
+
   datasource:
     username: root
     password: nmba2535
@@ -45,6 +49,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
 
 #Mybatis-plus配置
 mybatis-plus:
