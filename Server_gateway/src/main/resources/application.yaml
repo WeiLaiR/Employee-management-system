@@ -1,0 +1,24 @@
+server:
+  port: 8333
+
+spring:
+  application:
+    name: Server_gateway
+
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+
+      routes:
+          - id: Server
+            uri: http://localhost:8888
+            predicates:
+              - Path=/server/**
+
