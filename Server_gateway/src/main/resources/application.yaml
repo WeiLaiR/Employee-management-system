@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: Server_gateway
+    name: server-gateway
 
 
   cloud:
@@ -17,8 +17,8 @@ spring:
           enabled: true
 
       routes:
-          - id: Server
-            uri: http://localhost:8888
+          - id: server-co
+            uri: lb://server-co
             predicates:
               - Path=/server/**
 
