@@ -73,7 +73,7 @@ export default {
 
           //请求后端发送公钥
           //注意！！！这里必须加await来等待异步任务执行完成，也就是将当前任务设置为同步，不然axios默认异步执行！！！
-          await request.post("/RSA/getPublicKey").then(res => {
+          await request.post("/server/RSA/getPublicKey").then(res => {
             this.publicKey = res.publicKey
           })
 
@@ -103,7 +103,7 @@ export default {
           this.loginEnc.encryptPW = encrypt.encrypt(sha256PW)
           this.loginEnc.email = this.loginEmp.email
 
-          request.post("/login/register", this.loginEnc).then(res => {
+          request.post("/server/login/register", this.loginEnc).then(res => {
             console.log(res)
             if (res.state === "Success") {
               this.$message.success("注册成功，请登录！")

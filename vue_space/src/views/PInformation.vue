@@ -222,7 +222,7 @@ export default {
     }
   },
   created() {
-    request.post("/department/get").then(res => {
+    request.post("/server/department/get").then(res => {
       console.log(res)
       this.newDep.eid = res.eid
       this.newDep.name = res.name
@@ -230,7 +230,7 @@ export default {
       this.newDep.post = res.post
     })
 
-    request.post("/information/getInformation").then(res => {
+    request.post("/server/information/getInformation").then(res => {
       console.log(res)
       this.newInformation.eid = res.eid
       this.newInformation.sex = res.sex
@@ -248,13 +248,13 @@ export default {
   methods: {
     save() {
       let sign = true
-      request.post("/department/addDep",this.newDep).then(res => {
+      request.post("/server/department/addDep",this.newDep).then(res => {
         if (!res){
           sign = false
         }
       })
 
-      request.post("/information/setInformation",this.newInformation).then(res => {
+      request.post("/server/information/setInformation",this.newInformation).then(res => {
         if (!res){
           sign = false
         }

@@ -352,7 +352,7 @@ export default {
       }
     },
     loadData() {
-      request.get("/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.depName === "" ? "null": this.depName)+"/"+(this.depValue === "" ? "null": this.depValue)).then(res => {
+      request.get("/server/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.depName === "" ? "null": this.depName)+"/"+(this.depValue === "" ? "null": this.depValue)).then(res => {
         console.log("num：" + this.pageNum)
         console.log("size：" + this.pageSize)
         console.log(res)
@@ -381,7 +381,7 @@ export default {
       this.newDep = {}
     },
     addDep() {
-      request.post("/department/addDep",this.newDep).then(res => {
+      request.post("/server/department/addDep",this.newDep).then(res => {
         if (res) {
           if (this.newDep.eid == null){
             this.$message.success("新增员工成功")
@@ -407,7 +407,7 @@ export default {
           .catch(_ => {});
     },
     isDelete() {
-      request.post("/department/deleteDep",this.newDep.eid).then(res => {
+      request.post("/server/department/deleteDep",this.newDep.eid).then(res => {
         if (res) {
           this.$message.success("已删除该员工信息！")
           if (this.total !== 1 && this.size === 1 && this.pageNum > 1) {
@@ -431,7 +431,7 @@ export default {
           .catch(_ => {});
     },
     isDeleteDeps() {
-      request.post("/department/deleteDeps",this.Deps).then(res => {
+      request.post("/server/department/deleteDeps",this.Deps).then(res => {
         if (res) {
           this.$message.success("已批量删除员工信息！")
           if (this.total !== 1 && this.size === this.Deps.length && this.pageNum > 1) {
@@ -445,7 +445,7 @@ export default {
     },
     showInformation(row) {
 
-      request.post("/department/getById",row.eid).then(res => {
+      request.post("/server/department/getById",row.eid).then(res => {
         console.log(res)
         this.newDep.eid = res.eid
         this.newDep.department = res.department
@@ -453,7 +453,7 @@ export default {
         this.newDep.post = res.post
       })
 
-      request.post("/information/getInformationById",row.eid).then(res => {
+      request.post("/server/information/getInformationById",row.eid).then(res => {
         console.log(res)
         this.newInformation.eid = res.eid
         this.newInformation.sex = res.sex === true ? "男" : "女"

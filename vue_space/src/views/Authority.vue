@@ -183,7 +183,7 @@ export default {
       }
     },
     loadData() {
-      request.get("/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.depName === "" ? "null": this.depName)+"/"+(this.depValue === "" ? "null": this.depValue)).then(res => {
+      request.get("/server/department/getPage/"+this.pageNum+"/"+this.pageSize+"/"+(this.depName === "" ? "null": this.depName)+"/"+(this.depValue === "" ? "null": this.depValue)).then(res => {
         console.log("num：" + this.pageNum)
         console.log("size：" + this.pageSize)
         console.log(res)
@@ -215,7 +215,7 @@ export default {
       this.returnAu.eid = row.eid
 
       //从数据库中读取权限信息并展示
-      request.post("/authority/getById", row.eid).then(res => {
+      request.post("/server/authority/getById", row.eid).then(res => {
         console.log("RES：")
         console.log(res)
         this.checks = []
@@ -245,7 +245,7 @@ export default {
 
       this.dialogFormVisible = false
 
-      request.post("/authority/update", this.returnAu).then(res => {
+      request.post("/server/authority/update", this.returnAu).then(res => {
         console.log(res)
         if (res) {
           this.$message.success("权限更改成功！")

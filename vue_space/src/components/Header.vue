@@ -62,7 +62,7 @@ export default {
   },
   created() {
     if (this.eid !== null){
-      this.request.post("/department/get").then(res => {
+      this.request.post("/server/department/get").then(res => {
         console.log(res)
         this.emp.name = res.name == null ? "新用户" : res.name
         localStorage.setItem("empName", this.emp.name)
@@ -73,7 +73,7 @@ export default {
   methods: {
     async logout() {
       //需同步执行
-      await this.request.post("/login/logout").then(res => {
+      await this.request.post("/server/login/logout").then(res => {
         if (res) {
           this.$message.success("Logout Success!")
         }
