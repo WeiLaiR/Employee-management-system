@@ -1,9 +1,9 @@
 <h1 align="center">Employee-management-system</h1>
-<h2 align="center">基于SpringBoot+Vue开发的员工管理系统</h2>
+<h2 align="center">基于SpringBoot+SpringCloud+Vue开发的员工管理系统</h2>
 
 ## 简介
 
-基于SpringBoot和Vue Element-UI开发的前后端分离的员工管理系统。
+基于SpringBoot、SpringCloud和Vue Element-UI开发的前后端分离的员工管理系统。
 
 多层加密保护重要数据安全(密码)。使用 jwt + 拦截器 + 自定义注解 完成用户认证、鉴权，且可在前端进行详细的权限控制。使用redis缓存频繁查询的数据以提升速度和降低数据库压力。后端自定义的全局异常处理。前端统一处理异常......
 
@@ -85,7 +85,7 @@
 
 ### 鉴权流程
 
-使用 jwt+拦截器+自定义注解进行鉴权，安全框架对本项目来说太笨重也太繁琐，所以手写即可。
+使用 jwt+拦截器+自定义注解进行鉴权。
 
 ![6_1](https://github.com/WeiLaiR/Employee-management-system/blob/master/image/6_1.png)
 
