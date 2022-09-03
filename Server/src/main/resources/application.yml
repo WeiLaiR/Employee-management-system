@@ -2,12 +2,12 @@
 server:
   port: 8888
 
-# 连接数据库
+
 spring:
   application:
-    name: Server
+    name: server-co
 
-
+  # 连接数据库
   datasource:
     username: root
     password: nmba2535
