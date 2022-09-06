@@ -10,7 +10,9 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
-        cluster-name: gateway1
+        cluster-name: gateway1  #设置集群名称
+        namespace: 8ab1173d-c1e7-4d64-a441-9326483eea4a  #设置命名空间
+        ephemeral: false  #更改为不是临时实例
 
     gateway:
       discovery:
