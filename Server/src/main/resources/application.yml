@@ -55,6 +55,8 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
         cluster-name: server1
+        namespace: 8ab1173d-c1e7-4d64-a441-9326483eea4a
+        ephemeral: false
 
   redis:
     port: 6379
@@ -67,4 +69,15 @@ mybatis-plus:
     db-config:
       logic-delete-value: true #逻辑已删除值true
       logic-not-delete-value: false #逻辑未删除值false
+
+
+
+
+
+feign:
+  httpclient:
+    enabled: true #支持http的开关
+    max-connections: 200 #最大连接数
+    max-connections-per-route: 50 #单个路径最大连接数
+
 
