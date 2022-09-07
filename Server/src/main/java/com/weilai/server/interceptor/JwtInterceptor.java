@@ -25,11 +25,8 @@ public class JwtInterceptor implements HandlerInterceptor {
             return true;
         }
 
-//      校验token是否为空
+//      获取token
         String token = request.getHeader("token");
-        if (!StringUtils.hasText(token)) {
-            throw new CustomException("Error", "无有效信息，请重新登录！");
-        }
 
 //      校验token是否能正常解析
         String eid;
