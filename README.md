@@ -5,9 +5,17 @@
 
 基于SpringBoot、SpringCloud和Vue Element-UI开发的前后端分离的员工管理系统。
 
-多层加密保护重要数据安全(密码)。使用 jwt + 拦截器 + 自定义注解 完成用户认证、鉴权，且可在前端进行详细的权限控制。使用redis缓存频繁查询的数据以提升速度和降低数据库压力。后端自定义的全局异常处理。前端统一处理异常......
+多层加密保护重要数据安全(密码)。使用 jwt + 拦截器 + 自定义注解 完成用户认证、鉴权，且可在前端进行详细的权限控制。使用redis缓存频繁查询的数据以提升速度和降低数据库压力。服务间Feign通信。后端自定义的全局异常处理。前端统一处理异常......
 
-目前仍在开发中，后续功能会快速更新...
+目前仍在开发中，后续功能会尽快更新...
+
+因项目变更为微服务项目，故部分模块功能、流程有所改变，README文档尚未更新！
+
+* Server服务仍在拆分
+* RSA加密模块已从Server工程中拆分出来
+* 接入Gateway网关，认证鉴权略有变化！
+
+
 
 ## [依赖项](https://github.com/WeiLaiR/Employee-management-system/network/dependencies)
 
@@ -15,7 +23,7 @@
 
 ### 登录注册模块
 
-用了很多加密，用以确保密码的安全。
+用了很多加密，用以确保密码的安全。（项目拆分为微服务后逻辑略有变化！示例图尚未更新！）
 
 ![1_2](https://github.com/WeiLaiR/Employee-management-system/blob/master/image/1_2.png)
 
@@ -85,7 +93,9 @@
 
 ### 鉴权流程
 
-使用 jwt+拦截器+自定义注解进行鉴权。
+使用 jwt+拦截器+自定义注解进行鉴权（项目拆分为微服务后逻辑略有变化！示例图尚未更新！）。
+
+（加入了Gateway网关，部分鉴权流程在网关完成）
 
 ![6_1](https://github.com/WeiLaiR/Employee-management-system/blob/master/image/6_1.png)
 
