@@ -64,8 +64,9 @@ export default {
 
            //请求后端发送公钥
            //注意！！！这里必须加await来等待异步任务执行完成，也就是将当前任务设置为同步，不然axios默认异步执行！！！
-           await request.post("/server/RSA/getPublicKey").then(res => {
+           await request.post("/RSA/getPublicKey").then(res => {
              this.publicKey = res.publicKey
+             console.log(this.publicKey)
            })
 
            // 进行简单的加盐
@@ -98,7 +99,7 @@ export default {
                localStorage.setItem("authority", res.authority)
                this.$router.push("/")
                this.$message.success("登陆成功!")
-             } else {
+             } else if (res.state !== "Error") {
                this.$message.error(res.message)
              }
            })
