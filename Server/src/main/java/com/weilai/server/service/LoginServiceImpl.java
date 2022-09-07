@@ -2,6 +2,7 @@ package com.weilai.server.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.weilai.server.client.RsaClient;
 import com.weilai.server.exception.CustomException;
 import com.weilai.server.mapper.AuthorityMapper;
 import com.weilai.server.mapper.LoginMapper;
@@ -44,19 +45,19 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         this.redisUtil = redisUtil;
     }
 
-    private RSA rsa;
+    private RsaClient rsaClient;
     @Autowired
-    public void setRsa(RSA rsa) {
-        this.rsa = rsa;
+    public void setRsaClient(RsaClient rsaClient) {
+        this.rsaClient = rsaClient;
     }
 
-//    没有使用Bcrypt
+    //    没有使用Bcrypt
 //    使用的是SHA3-256
 
     @Override
     public Map<String, Object> loginEmp(String email, String password) throws Exception {
 //      获取私钥，解密数据
-        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(rsa.getPrivateKey());
+        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(AesEncryptUtils.decrypt(rsaClient.getPrivateKey()));
         String pw = RSAUtils.privateDecrypt(password, privateKey);
         HashMap<String, Object> map = new HashMap<>();
         QueryWrapper<Login> wrapper = new QueryWrapper<>();
@@ -66,6 +67,9 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         if (emp != null){
             if (DigestUtils.sha3_256Hex(pw).equals(emp.getPassword())){
                 Authority authority = authorityMapper.selectById(emp.getEid());
+                if (authority.getAuthority() == 0) {
+                    throw new CustomException("Error","您无权登录！请联系管理员查明情况！");
+                }
 
                 String token = TokenUtils.getToken(emp.getEid(), emp.getEmail());
                 redisUtil.set(emp.getEid().toString(), token,TIMEOUT);
@@ -84,7 +88,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     @Override
     public Map<String, Object> registerEmp(String email, String password) throws Exception {
         //      获取私钥，解密数据
-        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(rsa.getPrivateKey());
+        RSAPrivateKey privateKey = RSAUtils.getPrivateKey(AesEncryptUtils.decrypt(rsaClient.getPrivateKey()));
         String pw = RSAUtils.privateDecrypt(password, privateKey);
 
         QueryWrapper<Login> wrapper = new QueryWrapper<>();
