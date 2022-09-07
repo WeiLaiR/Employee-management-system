@@ -1,6 +1,7 @@
-package com.weilai.server.controller;
+package com.weilai.server_rsa.controller;
 
-import com.weilai.server.utils.RSA;
+
+import com.weilai.server_rsa.utils.CreateRsaKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-
 @RestController
-@RequestMapping("/server/RSA")
+@RequestMapping("/RSA")
 public class RsaController {
-    private RSA rsa;
+    private CreateRsaKey rsa;
     @Autowired
-    public void setRsa(RSA rsa) {
+    public void setRsa(CreateRsaKey rsa) {
         this.rsa = rsa;
     }
+
 
     @PostMapping("/getPublicKey")
     public Map<String,Object> getPublicKey(){
@@ -24,5 +25,12 @@ public class RsaController {
         map.put("publicKey", rsa.getPublicKey());
         return map;
     }
+
+    @PostMapping("/getPrivateKey")
+    public String getPrivateKey(){
+        return rsa.getPrivateKey();
+    }
+
+
 
 }
