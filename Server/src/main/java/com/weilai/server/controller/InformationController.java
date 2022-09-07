@@ -3,14 +3,11 @@ package com.weilai.server.controller;
 import com.weilai.server.annotation.AuthorityAnnotation;
 import com.weilai.server.pojo.Information;
 import com.weilai.server.service.InformationService;
-import com.weilai.server.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
