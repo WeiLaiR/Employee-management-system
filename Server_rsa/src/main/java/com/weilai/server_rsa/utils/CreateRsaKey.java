@@ -11,8 +11,8 @@ import java.util.Map;
 @Component
 public class CreateRsaKey implements ApplicationRunner {
 
-    public static String publicKey;  //公钥
-    public static String privateKey; //私钥
+    private static String publicKey;  //公钥
+    private static String privateKey; //私钥
 
     /**
      * 用于密钥生成
