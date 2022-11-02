@@ -28,23 +28,9 @@ public class JwtInterceptor implements HandlerInterceptor {
 //      获取token
         String token = request.getHeader("token");
 
-//      校验token是否能正常解析
-        String eid;
-        try {
-            eid = JWT.decode(token).getAudience().get(0);
-        }catch (JWTDecodeException jwtDecodeException){
-            throw new CustomException("Error","信息异常，请重新登录！");
-        }
-
-//      是否在redis中有记录
-        String storedToken = redisUtil.get(eid);
-        if (!StringUtils.hasText(storedToken)) {
-            throw new CustomException("Error","信息异常，请重新登录！");
-        }
-
-//      对比token是否一致
-        if (!storedToken.equals(token)) {
-            throw new CustomException("Error","信息异常，请重新登录！");
+//        查看token是否为空
+        if (!StringUtils.hasText(token)) {
+            throw new CustomException("Error", "信息异常，请重新登录！");
         }
 
         return true;
