@@ -27,6 +27,11 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use(
     response => {
         let res = response.data;
+
+        console.log('res======================================' + res)
+
+        
+
         // 如果是返回的文件
         if (response.config.responseType === 'blob') {
             return res
@@ -36,7 +41,16 @@ request.interceptors.response.use(
             res = res ? JSON.parse(res) : res
         }
 
-        if (res.state === "Error") {
+
+        if (res.state === "AuthError") {
+            ElementUI.Message({
+                type: 'error',
+                message: res.message
+            })
+            localStorage.removeItem("token")
+            localStorage.removeItem("authority")
+            router.push("/login")
+        }else if (res.state === "Error") {
             ElementUI.Message({
                 type: 'error',
                 message: res.message
@@ -49,6 +63,7 @@ request.interceptors.response.use(
             router.push("/401")
         }
 
+        
 
 
         return res;
