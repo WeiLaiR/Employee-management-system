@@ -117,7 +117,6 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
             throw new CustomException("Error","注销失败，出现未知错误！");
         }
         redisUtil.del(eid);
-        redisUtil.del(eid.concat("PW"));
         System.out.println("===================================注销成功=================================");
         return true;
     }
