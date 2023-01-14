@@ -1,7 +1,5 @@
 package com.weilai.server.interceptor;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.weilai.server.exception.CustomException;
 import com.weilai.server.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;

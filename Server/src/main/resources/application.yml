@@ -10,7 +10,7 @@ spring:
   # 连接数据库
   datasource:
     username: root
-    password: nmba2535
+    password: 12345678
     url: jdbc:mysql://localhost:3306/employee_management?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    更改数据源为德鲁伊
